@@ -12,7 +12,6 @@ use WechatWorkContactWayBundle\Request\AddContactWayRequest;
 use WechatWorkContactWayBundle\Request\CloseTempChatRequest;
 use WechatWorkContactWayBundle\Request\DeleteContactWayRequest;
 use WechatWorkContactWayBundle\Request\UpdateContactWayRequest;
-use WechatWorkExternalContactBundle\Repository\ExternalUserRepository;
 
 #[AsEntityListener(event: Events::prePersist, method: 'prePersist', entity: ContactWay::class)]
 #[AsEntityListener(event: Events::preUpdate, method: 'preUpdate', entity: ContactWay::class)]
@@ -21,7 +20,6 @@ class ContactWayListener
 {
     public function __construct(
         private readonly WorkService $workService,
-        private readonly ExternalUserRepository $externalUserRepository,
         private readonly ExternalUserLoaderInterface $userLoader,
         private readonly LoggerInterface $logger,
     ) {
@@ -56,11 +54,7 @@ class ContactWayListener
     {
         // 先结束临时对话
         if ($object->isTemp() && !empty($object->getUser()) && !empty($object->getUnionId())) {
-            $user = $this->externalUserRepository->findOneBy([
-                'unionId' => $object->getUnionId(),
-                'corp' => $object->getCorp(),
-            ]);
-            $user = $this->userLoader->loadByUnionIdAndCorp();
+            $user = $this->userLoader->loadByUnionIdAndCorp($object->getUnionId(), $object->getCorp());
             if ($user) {
                 $request = new CloseTempChatRequest();
                 $request->setUserId($object->getUser()[0]);
