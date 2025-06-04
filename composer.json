@@ -1,0 +1,31 @@
+{
+  "name": "tourze/wechat-work-contact-way-bundle",
+  "description": "客户联系「联系我」",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "require": {
+    "php": "^8.1",
+    "symfony/config": "^6.4",
+    "symfony/dependency-injection": "^6.4",
+    "symfony/doctrine-bridge": "^6.4",
+    "symfony/framework-bundle": "^6.4",
+    "symfony/http-kernel": "^6.4",
+    "symfony/routing": "^6.4",
+    "symfony/yaml": "^6.4 || ^7.1",
+    "tourze/wechat-work-bundle": "0.1.*"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "WechatWorkContactWayBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WechatWorkContactWayBundle\\Tests\\": "tests"
+    }
+  }
+}
