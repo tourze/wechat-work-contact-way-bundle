@@ -5,6 +5,7 @@ namespace WechatWorkContactWayBundle\EventSubscriber;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
+use Tourze\WechatWorkExternalContactModel\ExternalUserLoaderInterface;
 use WechatWorkBundle\Service\WorkService;
 use WechatWorkContactWayBundle\Entity\ContactWay;
 use WechatWorkContactWayBundle\Request\AddContactWayRequest;
@@ -21,6 +22,7 @@ class ContactWayListener
     public function __construct(
         private readonly WorkService $workService,
         private readonly ExternalUserRepository $externalUserRepository,
+        private readonly ExternalUserLoaderInterface $userLoader,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -58,6 +60,7 @@ class ContactWayListener
                 'unionId' => $object->getUnionId(),
                 'corp' => $object->getCorp(),
             ]);
+            $user = $this->userLoader->loadByUnionIdAndCorp();
             if ($user) {
                 $request = new CloseTempChatRequest();
                 $request->setUserId($object->getUser()[0]);
