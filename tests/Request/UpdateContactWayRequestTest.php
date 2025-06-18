@@ -68,8 +68,6 @@ class UpdateContactWayRequestTest extends TestCase
         $request->setUser(['user001']);
         
         $options = $request->getRequestOptions();
-        
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
         $this->assertArrayHasKey('config_id', $options['json']);
         $this->assertArrayHasKey('type', $options['json']);
@@ -330,7 +328,6 @@ class UpdateContactWayRequestTest extends TestCase
         
         // 验证请求数据结构完整性
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertSame($configId, $options['json']['config_id']);
         $this->assertSame(2, $options['json']['type']);
         $this->assertSame(1, $options['json']['scene']);

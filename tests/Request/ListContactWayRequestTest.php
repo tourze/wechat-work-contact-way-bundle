@@ -98,8 +98,6 @@ class ListContactWayRequestTest extends TestCase
         $request = new ListContactWayRequest();
         
         $options = $request->getRequestOptions();
-        
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
         $this->assertArrayHasKey('limit', $options['json']);
         $this->assertSame(100, $options['json']['limit']);
@@ -436,7 +434,6 @@ class ListContactWayRequestTest extends TestCase
         
         // 验证请求数据结构完整性
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertSame($startTime, $options['json']['start_time']);
         $this->assertSame($endTime, $options['json']['end_time']);
         $this->assertSame($cursor, $options['json']['cursor']);

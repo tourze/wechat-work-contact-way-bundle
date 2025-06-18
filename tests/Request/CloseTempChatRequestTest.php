@@ -75,10 +75,7 @@ class CloseTempChatRequestTest extends TestCase
         $request->setExternalUserId('test_external');
         
         $options = $request->getRequestOptions();
-        
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('userid', $options['json']);
         $this->assertArrayHasKey('external_userid', $options['json']);
         $this->assertCount(2, $options['json']);

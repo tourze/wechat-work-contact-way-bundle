@@ -178,8 +178,6 @@ class ContactWayFieldTest extends TestCase
         $this->instance->setExclusive(false);
 
         $json = $this->instance->getFieldJson();
-
-        $this->assertIsArray($json);
         $this->assertArrayHasKey('type', $json);
         $this->assertArrayHasKey('scene', $json);
         $this->assertArrayHasKey('skip_verify', $json);

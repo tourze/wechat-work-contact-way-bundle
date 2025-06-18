@@ -61,10 +61,7 @@ class DeleteContactWayRequestTest extends TestCase
         $request->setConfigId('test_config');
         
         $options = $request->getRequestOptions();
-        
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('config_id', $options['json']);
         $this->assertCount(1, $options['json']);
     }
@@ -294,7 +291,6 @@ class DeleteContactWayRequestTest extends TestCase
         
         // 验证请求数据结构完整性
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertSame($configId, $options['json']['config_id']);
         
         // 验证只包含必要的字段

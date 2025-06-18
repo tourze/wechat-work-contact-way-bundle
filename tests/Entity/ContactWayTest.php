@@ -487,7 +487,7 @@ class ContactWayTest extends TestCase
 
     public function test_setCreateTime_withValidDateTime_setsTimeCorrectly(): void
     {
-        $createTime = new \DateTime('2024-01-01 10:00:00');
+        $createTime = new \DateTimeImmutable('2024-01-01 10:00:00');
         
         $this->contactWay->setCreateTime($createTime);
         
@@ -496,7 +496,7 @@ class ContactWayTest extends TestCase
 
     public function test_setCreateTime_withNull_setsNull(): void
     {
-        $this->contactWay->setCreateTime(new \DateTime());
+        $this->contactWay->setCreateTime(new \DateTimeImmutable());
         
         $this->contactWay->setCreateTime(null);
         
@@ -505,7 +505,7 @@ class ContactWayTest extends TestCase
 
     public function test_setUpdateTime_withValidDateTime_setsTimeCorrectly(): void
     {
-        $updateTime = new \DateTime('2024-01-15 12:00:00');
+        $updateTime = new \DateTimeImmutable('2024-01-15 12:00:00');
         
         $this->contactWay->setUpdateTime($updateTime);
         
@@ -514,7 +514,7 @@ class ContactWayTest extends TestCase
 
     public function test_setUpdateTime_withNull_setsNull(): void
     {
-        $this->contactWay->setUpdateTime(new \DateTime());
+        $this->contactWay->setUpdateTime(new \DateTimeImmutable());
         
         $this->contactWay->setUpdateTime(null);
         
@@ -549,8 +549,8 @@ class ContactWayTest extends TestCase
      */
     public function test_chainedSetters_returnSameInstance(): void
     {
-        $createTime = new \DateTime('2024-01-01');
-        $updateTime = new \DateTime('2024-01-15');
+        $createTime = new \DateTimeImmutable('2024-01-01');
+        $updateTime = new \DateTimeImmutable('2024-01-15');
         
         $result = $this->contactWay
             ->setConfigId('config_chain')
@@ -682,7 +682,7 @@ class ContactWayTest extends TestCase
     public function test_edgeCases_dateTimeTypes(): void
     {
         // 测试DateTime
-        $dateTime = new \DateTime('2024-01-15 12:30:45');
+        $dateTime = new \DateTimeImmutable('2024-01-15 12:30:45');
         $this->contactWay->setCreateTime($dateTime);
         $this->assertSame($dateTime, $this->contactWay->getCreateTime());
         

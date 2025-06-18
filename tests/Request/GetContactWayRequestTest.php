@@ -61,10 +61,7 @@ class GetContactWayRequestTest extends TestCase
         $request->setConfigId('test_config');
         
         $options = $request->getRequestOptions();
-        
-        $this->assertIsArray($options);
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('config_id', $options['json']);
         $this->assertCount(1, $options['json']);
     }
@@ -248,7 +245,6 @@ class GetContactWayRequestTest extends TestCase
         
         // 验证参数结构正确
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertArrayHasKey('config_id', $options['json']);
         $this->assertSame($configId, $options['json']['config_id']);
         
@@ -327,7 +323,6 @@ class GetContactWayRequestTest extends TestCase
         
         // 验证请求数据结构完整性
         $this->assertArrayHasKey('json', $options);
-        $this->assertIsArray($options['json']);
         $this->assertSame($configId, $options['json']['config_id']);
         
         // 验证只包含必要的字段
