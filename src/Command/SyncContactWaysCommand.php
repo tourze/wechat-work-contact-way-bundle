@@ -19,6 +19,8 @@ use WechatWorkContactWayBundle\Request\ListContactWayRequest;
 #[AsCommand(name: 'wechat-work:sync-contact-way', description: '同步获取联系我的方式')]
 class SyncContactWaysCommand extends Command
 {
+    public const NAME = 'sync-contact-ways';
+
     public function __construct(
         private readonly AgentRepository $agentRepository,
         private readonly ContactWayRepository $contactWayRepository,

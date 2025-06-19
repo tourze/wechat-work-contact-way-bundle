@@ -23,7 +23,7 @@ use WechatWorkContactWayBundle\Repository\ContactWayRepository;
 #[ORM\Entity(repositoryClass: ContactWayRepository::class)]
 #[ORM\Table(name: 'wechat_work_external_contact_contact_way', options: ['comment' => '客户联系[联系我]'])]
 class ContactWay implements PlainArrayInterface
-{
+, \Stringable{
     use TimestampableAware;
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -377,5 +377,10 @@ class ContactWay implements PlainArrayInterface
             'id' => $this->getId(),
             'configId' => $this->getConfigId(),
         ];
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }
