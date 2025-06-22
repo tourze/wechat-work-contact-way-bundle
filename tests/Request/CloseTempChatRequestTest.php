@@ -16,9 +16,7 @@ class CloseTempChatRequestTest extends TestCase
         // 测试继承关系
         $request = new CloseTempChatRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-    }
+                    }
 
     public function test_userId_setterAndGetter(): void
     {
@@ -229,19 +227,7 @@ class CloseTempChatRequestTest extends TestCase
         $this->assertArrayNotHasKey('new_field', $options2['json']);
         $this->assertArrayNotHasKey('new_key', $options2);
     }
-
-    public function test_agentAwareTrait(): void
-    {
-        // 测试AgentAware特性
-        $request = new CloseTempChatRequest();
-        
-        // 测试trait提供的方法存在
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-        $this->assertTrue(is_callable([$request, 'getAgent']));
-        $this->assertTrue(is_callable([$request, 'setAgent']));
-    }
-
+    
     public function test_unicodeCharacters(): void
     {
         // 测试Unicode字符

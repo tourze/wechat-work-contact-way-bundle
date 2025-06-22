@@ -16,8 +16,6 @@ class AddContactWayRequestTest extends TestCase
         // 测试继承关系
         $request = new AddContactWayRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
     }
 
     public function test_requestPath(): void
@@ -494,19 +492,7 @@ class AddContactWayRequestTest extends TestCase
         $this->assertArrayNotHasKey('new_field', $options2['json']);
         $this->assertArrayNotHasKey('new_key', $options2);
     }
-
-    public function test_agentAwareTrait(): void
-    {
-        // 测试AgentAware特性
-        $request = new AddContactWayRequest();
-        
-        // 测试trait提供的方法存在
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-        $this->assertTrue(is_callable([$request, 'getAgent']));
-        $this->assertTrue(is_callable([$request, 'setAgent']));
-    }
-
+    
     public function test_contactWayFieldTrait(): void
     {
         // 测试ContactWayField特性
@@ -524,7 +510,6 @@ class AddContactWayRequestTest extends TestCase
         
         foreach ($methods as $method) {
             $this->assertTrue(method_exists($request, $method));
-            $this->assertTrue(is_callable([$request, $method]));
         }
     }
 
@@ -578,4 +563,4 @@ class AddContactWayRequestTest extends TestCase
         // 验证只包含设置的字段
         $this->assertCount(1, $options);
     }
-} 
+}

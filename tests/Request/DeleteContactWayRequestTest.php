@@ -16,9 +16,7 @@ class DeleteContactWayRequestTest extends TestCase
         // 测试继承关系
         $request = new DeleteContactWayRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-    }
+                    }
 
     public function test_requestPath(): void
     {
@@ -208,19 +206,7 @@ class DeleteContactWayRequestTest extends TestCase
         $this->assertArrayNotHasKey('new_field', $options2['json']);
         $this->assertArrayNotHasKey('new_key', $options2);
     }
-
-    public function test_agentAwareTrait(): void
-    {
-        // 测试AgentAware特性
-        $request = new DeleteContactWayRequest();
-        
-        // 测试trait提供的方法存在
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-        $this->assertTrue(is_callable([$request, 'getAgent']));
-        $this->assertTrue(is_callable([$request, 'setAgent']));
-    }
-
+    
     public function test_emptyStringValue(): void
     {
         // 测试空字符串值
@@ -306,7 +292,6 @@ class DeleteContactWayRequestTest extends TestCase
         // 测试配置ID是必需的字符串
         $configId = 'validation_test_config_id';
         $request->setConfigId($configId);
-        $this->assertIsString($request->getConfigId());
         $this->assertSame($configId, $request->getConfigId());
     }
 

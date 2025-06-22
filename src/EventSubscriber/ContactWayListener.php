@@ -55,7 +55,7 @@ class ContactWayListener
         // 先结束临时对话
         if ($object->isTemp() && !empty($object->getUser()) && !empty($object->getUnionId())) {
             $user = $this->userLoader->loadByUnionIdAndCorp($object->getUnionId(), $object->getCorp());
-            if ($user) {
+            if (null !== $user) {
                 $request = new CloseTempChatRequest();
                 $request->setUserId($object->getUser()[0]);
                 $request->setExternalUserId($user->getExternalUserId());

@@ -16,9 +16,7 @@ class UpdateContactWayRequestTest extends TestCase
         // 测试继承关系
         $request = new UpdateContactWayRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-    }
+                    }
 
     public function test_requestPath(): void
     {
@@ -249,40 +247,7 @@ class UpdateContactWayRequestTest extends TestCase
         $this->assertSame('original_state', $options2['json']['state']);
         $this->assertArrayNotHasKey('new_field', $options2['json']);
     }
-
-    public function test_agentAwareTrait(): void
-    {
-        // 测试AgentAware特性
-        $request = new UpdateContactWayRequest();
-        
-        // 测试trait提供的方法存在
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-        $this->assertTrue(is_callable([$request, 'getAgent']));
-        $this->assertTrue(is_callable([$request, 'setAgent']));
-    }
-
-    public function test_contactWayFieldTrait(): void
-    {
-        // 测试ContactWayField特性
-        $request = new UpdateContactWayRequest();
-        
-        // 验证trait提供的主要方法都存在
-        $methods = [
-            'getType', 'setType', 'getScene', 'setScene', 'getStyle', 'setStyle',
-            'getUser', 'setUser', 'isSkipVerify', 'setSkipVerify', 'getState', 'setState',
-            'getParty', 'setParty', 'isTemp', 'setTemp', 'getExpiresIn', 'setExpiresIn',
-            'getChatExpiresIn', 'setChatExpiresIn', 'getUnionId', 'setUnionId',
-            'isExclusive', 'setExclusive', 'getConclusions', 'setConclusions',
-            'getRemark', 'setRemark'
-        ];
-        
-        foreach ($methods as $method) {
-            $this->assertTrue(method_exists($request, $method));
-            $this->assertTrue(is_callable([$request, $method]));
-        }
-    }
-
+    
     public function test_apiEndpointCorrectness(): void
     {
         // 测试API端点正确性

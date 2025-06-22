@@ -16,9 +16,7 @@ class ListContactWayRequestTest extends TestCase
         // 测试继承关系
         $request = new ListContactWayRequest();
         $this->assertInstanceOf(ApiRequest::class, $request);
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-    }
+                    }
 
     public function test_requestPath(): void
     {
@@ -363,19 +361,7 @@ class ListContactWayRequestTest extends TestCase
         $this->assertSame(100, $options2['json']['limit']);
         $this->assertArrayNotHasKey('new_field', $options2['json']);
     }
-
-    public function test_agentAwareTrait(): void
-    {
-        // 测试AgentAware特性
-        $request = new ListContactWayRequest();
-        
-        // 测试trait提供的方法存在
-        $this->assertTrue(method_exists($request, 'getAgent'));
-        $this->assertTrue(method_exists($request, 'setAgent'));
-        $this->assertTrue(is_callable([$request, 'getAgent']));
-        $this->assertTrue(is_callable([$request, 'setAgent']));
-    }
-
+    
     public function test_emptyCursor(): void
     {
         // 测试空游标

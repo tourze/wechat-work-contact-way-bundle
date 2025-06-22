@@ -16,10 +16,10 @@ use WechatWorkContactWayBundle\Request\GetContactWayRequest;
 use WechatWorkContactWayBundle\Request\ListContactWayRequest;
 
 #[AsCronTask('1 6 * * *')]
-#[AsCommand(name: 'wechat-work:sync-contact-way', description: '同步获取联系我的方式')]
+#[AsCommand(name: self::NAME, description: '同步获取联系我的方式')]
 class SyncContactWaysCommand extends Command
 {
-    public const NAME = 'sync-contact-ways';
+    public const NAME = 'wechat-work:sync-contact-ways';
 
     public function __construct(
         private readonly AgentRepository $agentRepository,
@@ -45,7 +45,7 @@ class SyncContactWaysCommand extends Command
 
                 foreach ($response['contact_way'] as $item) {
                     $way = $this->contactWayRepository->findOneBy(['configId' => $item['config_id']]);
-                    if ($way) {
+                    if (null !== $way) {
                         continue;
                     }
 

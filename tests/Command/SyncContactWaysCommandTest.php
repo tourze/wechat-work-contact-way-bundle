@@ -313,7 +313,7 @@ class SyncContactWaysCommandTest extends TestCase
     public function testCommandNameAndDescription(): void
     {
         // 测试命令名称和描述
-        self::assertSame('wechat-work:sync-contact-way', $this->command->getName());
+        self::assertSame('wechat-work:sync-contact-ways', $this->command->getName());
         self::assertSame('同步获取联系我的方式', $this->command->getDescription());
     }
 

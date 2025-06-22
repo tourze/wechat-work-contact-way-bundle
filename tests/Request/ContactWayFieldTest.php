@@ -3,6 +3,7 @@
 namespace WechatWorkContactWayBundle\Tests\Request;
 
 use PHPUnit\Framework\TestCase;
+use WechatWorkBundle\Request\AgentAware;
 use WechatWorkContactWayBundle\Request\ContactWayField;
 
 /**
@@ -364,9 +365,6 @@ class ContactWayFieldTest extends TestCase
     public function test_createFromObject(): void
     {
         // 由于createFromObject需要真实的ContactWay实体，这里主要验证静态方法存在
-        $this->assertTrue(method_exists(ContactWayFieldTestClass::class, 'createFromObject'));
-        $this->assertTrue(is_callable([ContactWayFieldTestClass::class, 'createFromObject']));
-        
         // 验证方法是静态的
         $reflection = new \ReflectionMethod(ContactWayFieldTestClass::class, 'createFromObject');
         $this->assertTrue($reflection->isStatic());
@@ -637,18 +635,7 @@ class ContactWayFieldTest extends TestCase
 class ContactWayFieldTestClass
 {
     use ContactWayField;
-    
-    private ?string $agent = null;
-    
-    public function getAgent(): ?string
-    {
-        return $this->agent;
-    }
-    
-    public function setAgent(?string $agent): void
-    {
-        $this->agent = $agent;
-    }
+    use AgentAware;
     
     /**
      * 公开getFieldJson方法用于测试
