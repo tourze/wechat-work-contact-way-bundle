@@ -19,7 +19,7 @@ use WechatWorkContactWayBundle\Repository\ContactWayRepository;
 
 /**
  * 同步联系方式命令测试
- * 
+ *
  * 测试关注点：
  * - 联系方式同步逻辑
  * - API调用和响应处理

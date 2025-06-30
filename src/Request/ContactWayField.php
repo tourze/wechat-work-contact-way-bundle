@@ -103,9 +103,11 @@ trait ContactWayField
         return $this->type;
     }
 
-    public function setType(int $type): void
+    public function setType(?int $type): void
     {
-        $this->type = $type;
+        if ($type !== null) {
+            $this->type = $type;
+        }
     }
 
     public function getScene(): int
@@ -113,9 +115,11 @@ trait ContactWayField
         return $this->scene;
     }
 
-    public function setScene(int $scene): void
+    public function setScene(?int $scene): void
     {
-        $this->scene = $scene;
+        if ($scene !== null) {
+            $this->scene = $scene;
+        }
     }
 
     public function getStyle(): ?int

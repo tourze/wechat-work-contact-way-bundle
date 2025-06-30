@@ -15,7 +15,7 @@ use WechatWorkContactWayBundle\Repository\ContactWayRepository;
 use WechatWorkContactWayBundle\Request\GetContactWayRequest;
 use WechatWorkContactWayBundle\Request\ListContactWayRequest;
 
-#[AsCronTask('1 6 * * *')]
+#[AsCronTask(expression: '1 6 * * *')]
 #[AsCommand(name: self::NAME, description: '同步获取联系我的方式')]
 class SyncContactWaysCommand extends Command
 {

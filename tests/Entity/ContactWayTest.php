@@ -8,7 +8,7 @@ use WechatWorkContactWayBundle\Entity\ContactWay;
 
 /**
  * ContactWay 实体测试用例
- * 
+ *
  * 测试客户联系「联系我」实体的所有功能
  */
 class ContactWayTest extends TestCase
