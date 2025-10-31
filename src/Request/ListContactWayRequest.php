@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkContactWayBundle\Request;
 
 use HttpClientBundle\Request\ApiRequest;
@@ -35,11 +37,16 @@ class ListContactWayRequest extends ApiRequest
      */
     private int $limit = 100;
 
+    private const API_PATH = 'cgi-bin/externalcontact/list_contact_way';
+
     public function getRequestPath(): string
     {
-        return '/cgi-bin/externalcontact/list_contact_way';
+        return '/' . self::API_PATH;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $json = [

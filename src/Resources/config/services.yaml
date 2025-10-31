@@ -1,12 +1,25 @@
 services:
-  # default configuration for services in *this* file
-  _defaults:
-    autowire: true      # Automatically injects dependencies in your services.
-    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true
 
-  WechatWorkContactWayBundle\Command\:
-    resource: '../../Command/'
-  WechatWorkContactWayBundle\EventSubscriber\:
-    resource: '../../EventSubscriber/'
-  WechatWorkContactWayBundle\Repository\:
-    resource: '../../Repository/'
+    WechatWorkContactWayBundle\Command\:
+        resource: '../../Command/'
+
+    WechatWorkContactWayBundle\Controller\:
+        resource: '../../Controller/'
+
+    WechatWorkContactWayBundle\Repository\:
+        resource: '../../Repository/'
+
+    WechatWorkContactWayBundle\Service\:
+        resource: '../../Service/'
+
+    WechatWorkContactWayBundle\EventSubscriber\:
+        resource: '../../EventSubscriber/'
+
+    # Make AdminMenu service public for testing
+    WechatWorkContactWayBundle\Service\AdminMenu:
+        public: true

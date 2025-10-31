@@ -2,28 +2,55 @@
 
 namespace WechatWorkContactWayBundle\Tests\Entity;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tourze\Arrayable\PlainArrayInterface;
+use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use WechatWorkContactWayBundle\Entity\ContactWay;
 
 /**
  * ContactWay 实体测试用例
  *
  * 测试客户联系「联系我」实体的所有功能
+ *
+ * @internal
  */
-class ContactWayTest extends TestCase
+#[CoversClass(ContactWay::class)]
+final class ContactWayTest extends AbstractEntityTestCase
 {
-    private ContactWay $contactWay;
-
-    protected function setUp(): void
+    protected function createEntity(): object
     {
-        $this->contactWay = new ContactWay();
+        return new ContactWay();
     }
 
-    public function test_constructor_setsDefaultValues(): void
+    /**
+     * 提供属性及其样本值的 Data Provider
+     *
+     * @return iterable<string, array{0: string, 1: mixed}>
+     */
+    public static function propertiesProvider(): iterable
+    {
+        yield 'configId' => ['configId', 'test_config_id'];
+        yield 'type' => ['type', 1];
+        yield 'scene' => ['scene', 1];
+        yield 'style' => ['style', 1];
+        yield 'remark' => ['remark', 'test remark'];
+        yield 'skipVerify' => ['skipVerify', true];
+        yield 'state' => ['state', 'test_state'];
+        yield 'user' => ['user', ['user1', 'user2']];
+        yield 'party' => ['party', ['1', '2']];
+        yield 'temp' => ['temp', false];
+        yield 'expiresIn' => ['expiresIn', 3600];
+        yield 'chatExpiresIn' => ['chatExpiresIn', 1800];
+        yield 'unionId' => ['unionId', 'test_union_id'];
+        yield 'exclusive' => ['exclusive', false];
+        yield 'conclusions' => ['conclusions', ['text' => 'test conclusion']];
+        yield 'qrCode' => ['qrCode', 'https://test.com/qrcode.jpg'];
+    }
+
+    public function testConstructorSetsDefaultValues(): void
     {
         $contactWay = new ContactWay();
-        
+
         $this->assertNull($contactWay->getId());
         $this->assertNull($contactWay->getCorp());
         $this->assertNull($contactWay->getAgent());
@@ -51,644 +78,654 @@ class ContactWayTest extends TestCase
         $this->assertNull($contactWay->getUpdateTime());
     }
 
-    public function test_implementsCorrectInterfaces(): void
+    public function testImplementsCorrectInterfaces(): void
     {
-        $this->assertInstanceOf(PlainArrayInterface::class, $this->contactWay);
+        $contactWay = new ContactWay();
+        $this->assertInstanceOf(PlainArrayInterface::class, $contactWay);
     }
 
-    public function test_setConfigId_withValidId_setsIdCorrectly(): void
+    public function testSetConfigIdWithValidIdSetsIdCorrectly(): void
     {
         $configId = 'config_123456';
-        
-        $result = $this->contactWay->setConfigId($configId);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($configId, $this->contactWay->getConfigId());
+        $contactWay = new ContactWay();
+
+        $contactWay->setConfigId($configId);
+
+        $this->assertSame($configId, $contactWay->getConfigId());
     }
 
-    public function test_setConfigId_withNull_setsNull(): void
+    public function testSetConfigIdWithNullSetsNull(): void
     {
-        $this->contactWay->setConfigId('old_config');
-        
-        $result = $this->contactWay->setConfigId(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getConfigId());
+        $contactWay = new ContactWay();
+        $contactWay->setConfigId('old_config');
+
+        $contactWay->setConfigId(null);
+
+        $this->assertNull($contactWay->getConfigId());
     }
 
-    public function test_setType_withValidType_setsTypeCorrectly(): void
+    public function testSetTypeWithValidTypeSetsTypeCorrectly(): void
     {
         $type = 1; // 单人联系方式
-        
-        $result = $this->contactWay->setType($type);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($type, $this->contactWay->getType());
+        $contactWay = new ContactWay();
+
+        $contactWay->setType($type);
+
+        $this->assertSame($type, $contactWay->getType());
     }
 
-    public function test_setType_withMultiplePersonType_setsTypeCorrectly(): void
+    public function testSetTypeWithMultiplePersonTypeSetsTypeCorrectly(): void
     {
         $type = 2; // 多人联系方式
-        
-        $result = $this->contactWay->setType($type);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($type, $this->contactWay->getType());
+        $contactWay = new ContactWay();
+
+        $contactWay->setType($type);
+
+        $this->assertSame($type, $contactWay->getType());
     }
 
-    public function test_setScene_withValidScene_setsSceneCorrectly(): void
+    public function testSetSceneWithValidSceneSetsSceneCorrectly(): void
     {
         $scene = 1; // 在小程序中联系
-        
-        $result = $this->contactWay->setScene($scene);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($scene, $this->contactWay->getScene());
+        $contactWay = new ContactWay();
+
+        $contactWay->setScene($scene);
+
+        $this->assertSame($scene, $contactWay->getScene());
     }
 
-    public function test_setScene_withQrcodeScene_setsSceneCorrectly(): void
+    public function testSetSceneWithQrcodeSceneSetsSceneCorrectly(): void
     {
         $scene = 2; // 通过二维码联系
-        
-        $result = $this->contactWay->setScene($scene);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($scene, $this->contactWay->getScene());
+        $contactWay = new ContactWay();
+
+        $contactWay->setScene($scene);
+
+        $this->assertSame($scene, $contactWay->getScene());
     }
 
-    public function test_setStyle_withValidStyle_setsStyleCorrectly(): void
+    public function testSetStyleWithValidStyleSetsStyleCorrectly(): void
     {
         $style = 1; // 小程序控件样式
-        
-        $result = $this->contactWay->setStyle($style);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($style, $this->contactWay->getStyle());
+        $contactWay = new ContactWay();
+
+        $contactWay->setStyle($style);
+
+        $this->assertSame($style, $contactWay->getStyle());
     }
 
-    public function test_setStyle_withNull_setsNull(): void
+    public function testSetStyleWithNullSetsNull(): void
     {
-        $this->contactWay->setStyle(1);
-        
-        $result = $this->contactWay->setStyle(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getStyle());
+        $contactWay = new ContactWay();
+        $contactWay->setStyle(1);
+
+        $contactWay->setStyle(null);
+
+        $this->assertNull($contactWay->getStyle());
     }
 
-    public function test_setRemark_withValidRemark_setsRemarkCorrectly(): void
+    public function testSetRemarkWithValidRemarkSetsRemarkCorrectly(): void
     {
         $remark = '这是测试备注';
-        
-        $result = $this->contactWay->setRemark($remark);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($remark, $this->contactWay->getRemark());
+        $contactWay = new ContactWay();
+
+        $contactWay->setRemark($remark);
+
+        $this->assertSame($remark, $contactWay->getRemark());
     }
 
-    public function test_setRemark_withNull_setsNull(): void
+    public function testSetRemarkWithNullSetsNull(): void
     {
-        $this->contactWay->setRemark('old remark');
-        
-        $result = $this->contactWay->setRemark(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getRemark());
+        $contactWay = new ContactWay();
+        $contactWay->setRemark('old remark');
+
+        $contactWay->setRemark(null);
+
+        $this->assertNull($contactWay->getRemark());
     }
 
-    public function test_setSkipVerify_withTrue_setsTrue(): void
+    public function testSetSkipVerifyWithTrueSetsTrue(): void
     {
-        $result = $this->contactWay->setSkipVerify(true);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertTrue($this->contactWay->isSkipVerify());
+        $contactWay = new ContactWay();
+        $contactWay->setSkipVerify(true);
+
+        $this->assertTrue($contactWay->isSkipVerify());
     }
 
-    public function test_setSkipVerify_withFalse_setsFalse(): void
+    public function testSetSkipVerifyWithFalseSetsFalse(): void
     {
-        $result = $this->contactWay->setSkipVerify(false);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertFalse($this->contactWay->isSkipVerify());
+        $contactWay = new ContactWay();
+        $contactWay->setSkipVerify(false);
+
+        $this->assertFalse($contactWay->isSkipVerify());
     }
 
-    public function test_setSkipVerify_withNull_setsNull(): void
+    public function testSetSkipVerifyWithNullSetsNull(): void
     {
-        $this->contactWay->setSkipVerify(true);
-        
-        $result = $this->contactWay->setSkipVerify(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->isSkipVerify());
+        $contactWay = new ContactWay();
+        $contactWay->setSkipVerify(true);
+
+        $contactWay->setSkipVerify(null);
+
+        $this->assertNull($contactWay->isSkipVerify());
     }
 
-    public function test_setState_withValidState_setsStateCorrectly(): void
+    public function testSetStateWithValidStateSetsStateCorrectly(): void
     {
         $state = 'channel_123';
-        
-        $result = $this->contactWay->setState($state);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($state, $this->contactWay->getState());
+        $contactWay = new ContactWay();
+
+        $contactWay->setState($state);
+
+        $this->assertSame($state, $contactWay->getState());
     }
 
-    public function test_setState_withNull_setsNull(): void
+    public function testSetStateWithNullSetsNull(): void
     {
-        $this->contactWay->setState('old_state');
-        
-        $result = $this->contactWay->setState(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getState());
+        $contactWay = new ContactWay();
+        $contactWay->setState('old_state');
+
+        $contactWay->setState(null);
+
+        $this->assertNull($contactWay->getState());
     }
 
-    public function test_setUser_withValidArray_setsUserCorrectly(): void
+    public function testSetUserWithValidArraySetsUserCorrectly(): void
     {
         $user = ['user1', 'user2', 'user3'];
-        
-        $result = $this->contactWay->setUser($user);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($user, $this->contactWay->getUser());
+        $contactWay = new ContactWay();
+
+        $contactWay->setUser($user);
+
+        $this->assertSame($user, $contactWay->getUser());
     }
 
-    public function test_setUser_withEmptyArray_setsEmptyArray(): void
+    public function testSetUserWithEmptyArraySetsEmptyArray(): void
     {
-        $result = $this->contactWay->setUser([]);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame([], $this->contactWay->getUser());
+        $contactWay = new ContactWay();
+        $contactWay->setUser([]);
+
+        $this->assertSame([], $contactWay->getUser());
     }
 
-    public function test_setUser_withNull_setsNull(): void
+    public function testSetUserWithNullSetsNull(): void
     {
-        $this->contactWay->setUser(['user1']);
-        
-        $result = $this->contactWay->setUser(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getUser());
+        $contactWay = new ContactWay();
+        $contactWay->setUser(['user1']);
+
+        $contactWay->setUser(null);
+
+        $this->assertNull($contactWay->getUser());
     }
 
-    public function test_setParty_withValidArray_setsPartyCorrectly(): void
+    public function testSetPartyWithValidArraySetsPartyCorrectly(): void
     {
-        $party = [1, 2, 3]; // 部门ID数组
-        
-        $result = $this->contactWay->setParty($party);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($party, $this->contactWay->getParty());
+        $party = ['1', '2', '3']; // 部门ID数组
+        $contactWay = new ContactWay();
+
+        $contactWay->setParty($party);
+
+        $this->assertSame($party, $contactWay->getParty());
     }
 
-    public function test_setParty_withNull_setsNull(): void
+    public function testSetPartyWithNullSetsNull(): void
     {
-        $this->contactWay->setParty([1, 2]);
-        
-        $result = $this->contactWay->setParty(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getParty());
+        $contactWay = new ContactWay();
+        $contactWay->setParty(['1', '2']);
+
+        $contactWay->setParty(null);
+
+        $this->assertNull($contactWay->getParty());
     }
 
-    public function test_setTemp_withTrue_setsTrue(): void
+    public function testSetTempWithTrueSetsTrue(): void
     {
-        $result = $this->contactWay->setTemp(true);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertTrue($this->contactWay->isTemp());
+        $contactWay = new ContactWay();
+        $contactWay->setTemp(true);
+
+        $this->assertTrue($contactWay->isTemp());
     }
 
-    public function test_setTemp_withFalse_setsFalse(): void
+    public function testSetTempWithFalseSetsFalse(): void
     {
-        $result = $this->contactWay->setTemp(false);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertFalse($this->contactWay->isTemp());
+        $contactWay = new ContactWay();
+        $contactWay->setTemp(false);
+
+        $this->assertFalse($contactWay->isTemp());
     }
 
-    public function test_setTemp_withNull_setsNull(): void
+    public function testSetTempWithNullSetsNull(): void
     {
-        $this->contactWay->setTemp(true);
-        
-        $result = $this->contactWay->setTemp(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->isTemp());
+        $contactWay = new ContactWay();
+        $contactWay->setTemp(true);
+
+        $contactWay->setTemp(null);
+
+        $this->assertNull($contactWay->isTemp());
     }
 
-    public function test_setExpiresIn_withValidSeconds_setsSecondsCorrectly(): void
+    public function testSetExpiresInWithValidSecondsSetsSecondsCorrectly(): void
     {
         $expiresIn = 86400; // 24小时
-        
-        $result = $this->contactWay->setExpiresIn($expiresIn);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($expiresIn, $this->contactWay->getExpiresIn());
+        $contactWay = new ContactWay();
+
+        $contactWay->setExpiresIn($expiresIn);
+
+        $this->assertSame($expiresIn, $contactWay->getExpiresIn());
     }
 
-    public function test_setExpiresIn_withNull_setsNull(): void
+    public function testSetExpiresInWithNullSetsNull(): void
     {
-        $this->contactWay->setExpiresIn(3600);
-        
-        $result = $this->contactWay->setExpiresIn(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getExpiresIn());
+        $contactWay = new ContactWay();
+        $contactWay->setExpiresIn(3600);
+
+        $contactWay->setExpiresIn(null);
+
+        $this->assertNull($contactWay->getExpiresIn());
     }
 
-    public function test_setChatExpiresIn_withValidSeconds_setsSecondsCorrectly(): void
+    public function testSetChatExpiresInWithValidSecondsSetsSecondsCorrectly(): void
     {
         $chatExpiresIn = 3600; // 1小时
-        
-        $result = $this->contactWay->setChatExpiresIn($chatExpiresIn);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($chatExpiresIn, $this->contactWay->getChatExpiresIn());
+        $contactWay = new ContactWay();
+
+        $contactWay->setChatExpiresIn($chatExpiresIn);
+
+        $this->assertSame($chatExpiresIn, $contactWay->getChatExpiresIn());
     }
 
-    public function test_setChatExpiresIn_withNull_setsNull(): void
+    public function testSetChatExpiresInWithNullSetsNull(): void
     {
-        $this->contactWay->setChatExpiresIn(1800);
-        
-        $result = $this->contactWay->setChatExpiresIn(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getChatExpiresIn());
+        $contactWay = new ContactWay();
+        $contactWay->setChatExpiresIn(1800);
+
+        $contactWay->setChatExpiresIn(null);
+
+        $this->assertNull($contactWay->getChatExpiresIn());
     }
 
-    public function test_setUnionId_withValidId_setsIdCorrectly(): void
+    public function testSetUnionIdWithValidIdSetsIdCorrectly(): void
     {
         $unionId = 'union_123456789';
-        
-        $result = $this->contactWay->setUnionId($unionId);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($unionId, $this->contactWay->getUnionId());
+        $contactWay = new ContactWay();
+
+        $contactWay->setUnionId($unionId);
+
+        $this->assertSame($unionId, $contactWay->getUnionId());
     }
 
-    public function test_setUnionId_withNull_setsNull(): void
+    public function testSetUnionIdWithNullSetsNull(): void
     {
-        $this->contactWay->setUnionId('old_union');
-        
-        $result = $this->contactWay->setUnionId(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getUnionId());
+        $contactWay = new ContactWay();
+        $contactWay->setUnionId('old_union');
+
+        $contactWay->setUnionId(null);
+
+        $this->assertNull($contactWay->getUnionId());
     }
 
-    public function test_setExclusive_withTrue_setsTrue(): void
+    public function testSetExclusiveWithTrueSetsTrue(): void
     {
-        $result = $this->contactWay->setExclusive(true);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertTrue($this->contactWay->isExclusive());
+        $contactWay = new ContactWay();
+        $contactWay->setExclusive(true);
+
+        $this->assertTrue($contactWay->isExclusive());
     }
 
-    public function test_setExclusive_withFalse_setsFalse(): void
+    public function testSetExclusiveWithFalseSetsFalse(): void
     {
-        $result = $this->contactWay->setExclusive(false);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertFalse($this->contactWay->isExclusive());
+        $contactWay = new ContactWay();
+        $contactWay->setExclusive(false);
+
+        $this->assertFalse($contactWay->isExclusive());
     }
 
-    public function test_setExclusive_withNull_setsNull(): void
+    public function testSetExclusiveWithNullSetsNull(): void
     {
-        $this->contactWay->setExclusive(true);
-        
-        $result = $this->contactWay->setExclusive(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->isExclusive());
+        $contactWay = new ContactWay();
+        $contactWay->setExclusive(true);
+
+        $contactWay->setExclusive(null);
+
+        $this->assertNull($contactWay->isExclusive());
     }
 
-    public function test_setConclusions_withValidArray_setConclusionsCorrectly(): void
+    public function testSetConclusionsWithValidArraySetConclusionsCorrectly(): void
     {
         $conclusions = [
             'text' => ['content' => '感谢您的咨询'],
-            'image' => ['media_id' => 'media_123']
+            'image' => ['media_id' => 'media_123'],
         ];
-        
-        $result = $this->contactWay->setConclusions($conclusions);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($conclusions, $this->contactWay->getConclusions());
+        $contactWay = new ContactWay();
+
+        $contactWay->setConclusions($conclusions);
+
+        $this->assertSame($conclusions, $contactWay->getConclusions());
     }
 
-    public function test_setConclusions_withNull_setsNull(): void
+    public function testSetConclusionsWithNullSetsNull(): void
     {
-        $this->contactWay->setConclusions(['text' => 'old']);
-        
-        $result = $this->contactWay->setConclusions(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getConclusions());
+        $contactWay = new ContactWay();
+        $contactWay->setConclusions(['text' => 'old']);
+
+        $contactWay->setConclusions(null);
+
+        $this->assertNull($contactWay->getConclusions());
     }
 
-    public function test_setQrCode_withValidUrl_setsUrlCorrectly(): void
+    public function testSetQrCodeWithValidUrlSetsUrlCorrectly(): void
     {
         $qrCode = 'https://example.com/qrcode.jpg';
-        
-        $result = $this->contactWay->setQrCode($qrCode);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($qrCode, $this->contactWay->getQrCode());
+        $contactWay = new ContactWay();
+
+        $contactWay->setQrCode($qrCode);
+
+        $this->assertSame($qrCode, $contactWay->getQrCode());
     }
 
-    public function test_setQrCode_withNull_setsNull(): void
+    public function testSetQrCodeWithNullSetsNull(): void
     {
-        $this->contactWay->setQrCode('old_qrcode');
-        
-        $result = $this->contactWay->setQrCode(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getQrCode());
+        $contactWay = new ContactWay();
+        $contactWay->setQrCode('old_qrcode');
+
+        $contactWay->setQrCode(null);
+
+        $this->assertNull($contactWay->getQrCode());
     }
 
-    public function test_setCreatedFromIp_withValidIp_setsIpCorrectly(): void
+    public function testSetCreatedFromIpWithValidIpSetsIpCorrectly(): void
     {
         $ip = '192.168.1.1';
-        
-        $result = $this->contactWay->setCreatedFromIp($ip);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($ip, $this->contactWay->getCreatedFromIp());
+        $contactWay = new ContactWay();
+
+        $contactWay->setCreatedFromIp($ip);
+
+        $this->assertSame($ip, $contactWay->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withNull_setsNull(): void
+    public function testSetCreatedFromIpWithNullSetsNull(): void
     {
-        $this->contactWay->setCreatedFromIp('127.0.0.1');
-        
-        $result = $this->contactWay->setCreatedFromIp(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getCreatedFromIp());
+        $contactWay = new ContactWay();
+        $contactWay->setCreatedFromIp('127.0.0.1');
+
+        $contactWay->setCreatedFromIp(null);
+
+        $this->assertNull($contactWay->getCreatedFromIp());
     }
 
-    public function test_setUpdatedFromIp_withValidIp_setsIpCorrectly(): void
+    public function testSetUpdatedFromIpWithValidIpSetsIpCorrectly(): void
     {
         $ip = '10.0.0.1';
-        
-        $result = $this->contactWay->setUpdatedFromIp($ip);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($ip, $this->contactWay->getUpdatedFromIp());
+        $contactWay = new ContactWay();
+
+        $contactWay->setUpdatedFromIp($ip);
+
+        $this->assertSame($ip, $contactWay->getUpdatedFromIp());
     }
 
-    public function test_setUpdatedFromIp_withNull_setsNull(): void
+    public function testSetUpdatedFromIpWithNullSetsNull(): void
     {
-        $this->contactWay->setUpdatedFromIp('172.16.0.1');
-        
-        $result = $this->contactWay->setUpdatedFromIp(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getUpdatedFromIp());
+        $contactWay = new ContactWay();
+        $contactWay->setUpdatedFromIp('172.16.0.1');
+
+        $contactWay->setUpdatedFromIp(null);
+
+        $this->assertNull($contactWay->getUpdatedFromIp());
     }
 
-    public function test_setCreatedBy_withValidUser_setsUserCorrectly(): void
+    public function testSetCreatedByWithValidUserSetsUserCorrectly(): void
     {
         $createdBy = 'admin_user';
-        
-        $result = $this->contactWay->setCreatedBy($createdBy);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($createdBy, $this->contactWay->getCreatedBy());
+        $contactWay = new ContactWay();
+
+        $contactWay->setCreatedBy($createdBy);
+
+        $this->assertSame($createdBy, $contactWay->getCreatedBy());
     }
 
-    public function test_setCreatedBy_withNull_setsNull(): void
+    public function testSetCreatedByWithNullSetsNull(): void
     {
-        $this->contactWay->setCreatedBy('old_user');
-        
-        $result = $this->contactWay->setCreatedBy(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getCreatedBy());
+        $contactWay = new ContactWay();
+        $contactWay->setCreatedBy('old_user');
+
+        $contactWay->setCreatedBy(null);
+
+        $this->assertNull($contactWay->getCreatedBy());
     }
 
-    public function test_setUpdatedBy_withValidUser_setsUserCorrectly(): void
+    public function testSetUpdatedByWithValidUserSetsUserCorrectly(): void
     {
         $updatedBy = 'updated_user';
-        
-        $result = $this->contactWay->setUpdatedBy($updatedBy);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame($updatedBy, $this->contactWay->getUpdatedBy());
+        $contactWay = new ContactWay();
+
+        $contactWay->setUpdatedBy($updatedBy);
+
+        $this->assertSame($updatedBy, $contactWay->getUpdatedBy());
     }
 
-    public function test_setUpdatedBy_withNull_setsNull(): void
+    public function testSetUpdatedByWithNullSetsNull(): void
     {
-        $this->contactWay->setUpdatedBy('old_user');
-        
-        $result = $this->contactWay->setUpdatedBy(null);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertNull($this->contactWay->getUpdatedBy());
+        $contactWay = new ContactWay();
+        $contactWay->setUpdatedBy('old_user');
+
+        $contactWay->setUpdatedBy(null);
+
+        $this->assertNull($contactWay->getUpdatedBy());
     }
 
-    public function test_setCreateTime_withValidDateTime_setsTimeCorrectly(): void
+    public function testSetCreateTimeWithValidDateTimeSetsTimeCorrectly(): void
     {
         $createTime = new \DateTimeImmutable('2024-01-01 10:00:00');
-        
-        $this->contactWay->setCreateTime($createTime);
-        
-        $this->assertSame($createTime, $this->contactWay->getCreateTime());
+        $contactWay = new ContactWay();
+
+        $contactWay->setCreateTime($createTime);
+
+        $this->assertSame($createTime, $contactWay->getCreateTime());
     }
 
-    public function test_setCreateTime_withNull_setsNull(): void
+    public function testSetCreateTimeWithNullSetsNull(): void
     {
-        $this->contactWay->setCreateTime(new \DateTimeImmutable());
-        
-        $this->contactWay->setCreateTime(null);
-        
-        $this->assertNull($this->contactWay->getCreateTime());
+        $contactWay = new ContactWay();
+        $contactWay->setCreateTime(new \DateTimeImmutable());
+
+        $contactWay->setCreateTime(null);
+
+        $this->assertNull($contactWay->getCreateTime());
     }
 
-    public function test_setUpdateTime_withValidDateTime_setsTimeCorrectly(): void
+    public function testSetUpdateTimeWithValidDateTimeSetsTimeCorrectly(): void
     {
         $updateTime = new \DateTimeImmutable('2024-01-15 12:00:00');
-        
-        $this->contactWay->setUpdateTime($updateTime);
-        
-        $this->assertSame($updateTime, $this->contactWay->getUpdateTime());
+        $contactWay = new ContactWay();
+
+        $contactWay->setUpdateTime($updateTime);
+
+        $this->assertSame($updateTime, $contactWay->getUpdateTime());
     }
 
-    public function test_setUpdateTime_withNull_setsNull(): void
+    public function testSetUpdateTimeWithNullSetsNull(): void
     {
-        $this->contactWay->setUpdateTime(new \DateTimeImmutable());
-        
-        $this->contactWay->setUpdateTime(null);
-        
-        $this->assertNull($this->contactWay->getUpdateTime());
+        $contactWay = new ContactWay();
+        $contactWay->setUpdateTime(new \DateTimeImmutable());
+
+        $contactWay->setUpdateTime(null);
+
+        $this->assertNull($contactWay->getUpdateTime());
     }
 
     /**
      * 测试 PlainArray 接口实现
      */
-    public function test_retrievePlainArray_returnsCorrectStructure(): void
+    public function testRetrievePlainArrayReturnsCorrectStructure(): void
     {
+        $contactWay = new ContactWay();
         // 使用反射设置ID (因为ID是自动生成的)
-        $reflection = new \ReflectionClass($this->contactWay);
+        $reflection = new \ReflectionClass($contactWay);
         $idProperty = $reflection->getProperty('id');
         $idProperty->setAccessible(true);
-        $idProperty->setValue($this->contactWay, '123456789');
-        
-        $this->contactWay->setConfigId('config_test');
-        
-        $result = $this->contactWay->retrievePlainArray();
-        
+        $idProperty->setValue($contactWay, '123456789');
+
+        $contactWay->setConfigId('config_test');
+
+        $result = $contactWay->retrievePlainArray();
+
         $expected = [
             'id' => '123456789',
-            'configId' => 'config_test'
+            'configId' => 'config_test',
         ];
-        
+
         $this->assertSame($expected, $result);
     }
 
     /**
-     * 测试链式调用
+     * 测试所有setter方法能正确设置值
      */
-    public function test_chainedSetters_returnSameInstance(): void
+    public function testAllSettersSetValuesCorrectly(): void
     {
+        $contactWay = new ContactWay();
         $createTime = new \DateTimeImmutable('2024-01-01');
         $updateTime = new \DateTimeImmutable('2024-01-15');
-        
-        $result = $this->contactWay
-            ->setConfigId('config_chain')
-            ->setType(1)
-            ->setScene(2)
-            ->setStyle(1)
-            ->setRemark('链式调用测试')
-            ->setSkipVerify(false)
-            ->setState('chain_state')
-            ->setUser(['user1', 'user2'])
-            ->setParty([1, 2])
-            ->setTemp(true)
-            ->setExpiresIn(3600)
-            ->setChatExpiresIn(1800)
-            ->setUnionId('union_chain')
-            ->setExclusive(true)
-            ->setConclusions(['text' => 'conclusion'])
-            ->setQrCode('https://qr.example.com')
-            ->setCreatedFromIp('192.168.1.1')
-            ->setUpdatedFromIp('192.168.1.2')
-            ->setCreatedBy('admin')
-            ->setUpdatedBy('editor');
-        
-        $this->contactWay->setCreateTime($createTime);
-        $this->contactWay->setUpdateTime($updateTime);
-        
-        $this->assertSame($this->contactWay, $result);
-        $this->assertSame('config_chain', $this->contactWay->getConfigId());
-        $this->assertSame(1, $this->contactWay->getType());
-        $this->assertSame(2, $this->contactWay->getScene());
-        $this->assertSame(1, $this->contactWay->getStyle());
-        $this->assertSame('链式调用测试', $this->contactWay->getRemark());
-        $this->assertFalse($this->contactWay->isSkipVerify());
-        $this->assertSame('chain_state', $this->contactWay->getState());
-        $this->assertSame(['user1', 'user2'], $this->contactWay->getUser());
-        $this->assertSame([1, 2], $this->contactWay->getParty());
-        $this->assertTrue($this->contactWay->isTemp());
-        $this->assertSame(3600, $this->contactWay->getExpiresIn());
-        $this->assertSame(1800, $this->contactWay->getChatExpiresIn());
-        $this->assertSame('union_chain', $this->contactWay->getUnionId());
-        $this->assertTrue($this->contactWay->isExclusive());
-        $this->assertSame(['text' => 'conclusion'], $this->contactWay->getConclusions());
-        $this->assertSame('https://qr.example.com', $this->contactWay->getQrCode());
-        $this->assertSame('192.168.1.1', $this->contactWay->getCreatedFromIp());
-        $this->assertSame('192.168.1.2', $this->contactWay->getUpdatedFromIp());
-        $this->assertSame('admin', $this->contactWay->getCreatedBy());
-        $this->assertSame('editor', $this->contactWay->getUpdatedBy());
-        $this->assertSame($createTime, $this->contactWay->getCreateTime());
-        $this->assertSame($updateTime, $this->contactWay->getUpdateTime());
+
+        // 分步设置各种值
+        $contactWay->setConfigId('config_chain');
+        $contactWay->setType(1);
+        $contactWay->setScene(2);
+        $contactWay->setStyle(1);
+        $contactWay->setRemark('链式调用测试');
+        $contactWay->setSkipVerify(false);
+        $contactWay->setState('chain_state');
+        $contactWay->setUser(['user1', 'user2']);
+        $contactWay->setParty(['1', '2']);
+        $contactWay->setTemp(true);
+        $contactWay->setExpiresIn(3600);
+        $contactWay->setChatExpiresIn(1800);
+        $contactWay->setUnionId('union_chain');
+        $contactWay->setExclusive(true);
+        $contactWay->setConclusions(['text' => 'conclusion']);
+        $contactWay->setQrCode('https://qr.example.com');
+        $contactWay->setCreatedFromIp('192.168.1.1');
+        $contactWay->setUpdatedFromIp('192.168.1.2');
+        $contactWay->setCreatedBy('admin');
+        $contactWay->setUpdatedBy('editor');
+        $contactWay->setCreateTime($createTime);
+        $contactWay->setUpdateTime($updateTime);
+
+        // 验证所有值都设置正确
+        $this->assertSame('config_chain', $contactWay->getConfigId());
+        $this->assertSame(1, $contactWay->getType());
+        $this->assertSame(2, $contactWay->getScene());
+        $this->assertSame(1, $contactWay->getStyle());
+        $this->assertSame('链式调用测试', $contactWay->getRemark());
+        $this->assertFalse($contactWay->isSkipVerify());
+        $this->assertSame('chain_state', $contactWay->getState());
+        $this->assertSame(['user1', 'user2'], $contactWay->getUser());
+        $this->assertSame(['1', '2'], $contactWay->getParty());
+        $this->assertTrue($contactWay->isTemp());
+        $this->assertSame(3600, $contactWay->getExpiresIn());
+        $this->assertSame(1800, $contactWay->getChatExpiresIn());
+        $this->assertSame('union_chain', $contactWay->getUnionId());
+        $this->assertTrue($contactWay->isExclusive());
+        $this->assertSame(['text' => 'conclusion'], $contactWay->getConclusions());
+        $this->assertSame('https://qr.example.com', $contactWay->getQrCode());
+        $this->assertSame('192.168.1.1', $contactWay->getCreatedFromIp());
+        $this->assertSame('192.168.1.2', $contactWay->getUpdatedFromIp());
+        $this->assertSame('admin', $contactWay->getCreatedBy());
+        $this->assertSame('editor', $contactWay->getUpdatedBy());
+        $this->assertSame($createTime, $contactWay->getCreateTime());
+        $this->assertSame($updateTime, $contactWay->getUpdateTime());
     }
 
     /**
      * 测试边界场景
      */
-    public function test_edgeCases_extremeValues(): void
+    public function testEdgeCasesExtremeValues(): void
     {
+        $contactWay = new ContactWay();
         // 测试极端整数值
-        $this->contactWay->setType(PHP_INT_MAX);
-        $this->assertSame(PHP_INT_MAX, $this->contactWay->getType());
-        
-        $this->contactWay->setScene(PHP_INT_MIN);
-        $this->assertSame(PHP_INT_MIN, $this->contactWay->getScene());
-        
-        $this->contactWay->setExpiresIn(0);
-        $this->assertSame(0, $this->contactWay->getExpiresIn());
-        
-        $this->contactWay->setChatExpiresIn(-1);
-        $this->assertSame(-1, $this->contactWay->getChatExpiresIn());
+        $contactWay->setType(PHP_INT_MAX);
+        $this->assertSame(PHP_INT_MAX, $contactWay->getType());
+
+        $contactWay->setScene(PHP_INT_MIN);
+        $this->assertSame(PHP_INT_MIN, $contactWay->getScene());
+
+        $contactWay->setExpiresIn(0);
+        $this->assertSame(0, $contactWay->getExpiresIn());
+
+        $contactWay->setChatExpiresIn(-1);
+        $this->assertSame(-1, $contactWay->getChatExpiresIn());
     }
 
-    public function test_edgeCases_longStrings(): void
+    public function testEdgeCasesLongStrings(): void
     {
+        $contactWay = new ContactWay();
         $longString = str_repeat('x', 1000);
-        
-        $this->contactWay->setConfigId($longString);
-        $this->contactWay->setRemark($longString);
-        $this->contactWay->setState($longString);
-        $this->contactWay->setUnionId($longString);
-        $this->contactWay->setQrCode($longString);
-        $this->contactWay->setCreatedFromIp($longString);
-        $this->contactWay->setUpdatedFromIp($longString);
-        $this->contactWay->setCreatedBy($longString);
-        $this->contactWay->setUpdatedBy($longString);
-        
-        $this->assertSame($longString, $this->contactWay->getConfigId());
-        $this->assertSame($longString, $this->contactWay->getRemark());
-        $this->assertSame($longString, $this->contactWay->getState());
-        $this->assertSame($longString, $this->contactWay->getUnionId());
-        $this->assertSame($longString, $this->contactWay->getQrCode());
-        $this->assertSame($longString, $this->contactWay->getCreatedFromIp());
-        $this->assertSame($longString, $this->contactWay->getUpdatedFromIp());
-        $this->assertSame($longString, $this->contactWay->getCreatedBy());
-        $this->assertSame($longString, $this->contactWay->getUpdatedBy());
+
+        $contactWay->setConfigId($longString);
+        $contactWay->setRemark($longString);
+        $contactWay->setState($longString);
+        $contactWay->setUnionId($longString);
+        $contactWay->setQrCode($longString);
+        $contactWay->setCreatedFromIp($longString);
+        $contactWay->setUpdatedFromIp($longString);
+        $contactWay->setCreatedBy($longString);
+        $contactWay->setUpdatedBy($longString);
+
+        $this->assertSame($longString, $contactWay->getConfigId());
+        $this->assertSame($longString, $contactWay->getRemark());
+        $this->assertSame($longString, $contactWay->getState());
+        $this->assertSame($longString, $contactWay->getUnionId());
+        $this->assertSame($longString, $contactWay->getQrCode());
+        $this->assertSame($longString, $contactWay->getCreatedFromIp());
+        $this->assertSame($longString, $contactWay->getUpdatedFromIp());
+        $this->assertSame($longString, $contactWay->getCreatedBy());
+        $this->assertSame($longString, $contactWay->getUpdatedBy());
     }
 
-    public function test_edgeCases_complexArrayData(): void
+    public function testEdgeCasesComplexArrayData(): void
     {
+        $contactWay = new ContactWay();
         $complexUser = [
-            'user1', 'user2', 'user3', 
-            'very_long_user_id_' . str_repeat('x', 100)
+            'user1', 'user2', 'user3',
+            'very_long_user_id_' . str_repeat('x', 100),
         ];
-        
-        $complexParty = [1, 2, 3, 999999999, -1, 0];
-        
+
+        $complexParty = ['1', '2', '3', '999999999', '-1', '0'];
+
         $complexConclusions = [
             'text' => [
-                'content' => '这是一个非常长的结束语内容' . str_repeat('测试', 50)
+                'content' => '这是一个非常长的结束语内容' . str_repeat('测试', 50),
             ],
             'image' => [
-                'media_id' => 'media_' . str_repeat('a', 100)
+                'media_id' => 'media_' . str_repeat('a', 100),
             ],
             'link' => [
                 'title' => '链接标题',
                 'picurl' => 'https://example.com/very/long/path/to/image.jpg',
                 'desc' => '链接描述',
-                'url' => 'https://example.com/very/long/path/to/target/page.html'
-            ]
+                'url' => 'https://example.com/very/long/path/to/target/page.html',
+            ],
         ];
-        
-        $this->contactWay->setUser($complexUser);
-        $this->contactWay->setParty($complexParty);
-        $this->contactWay->setConclusions($complexConclusions);
-        
-        $this->assertSame($complexUser, $this->contactWay->getUser());
-        $this->assertSame($complexParty, $this->contactWay->getParty());
-        $this->assertSame($complexConclusions, $this->contactWay->getConclusions());
+
+        $contactWay->setUser($complexUser);
+        $contactWay->setParty($complexParty);
+        $contactWay->setConclusions($complexConclusions);
+
+        $this->assertSame($complexUser, $contactWay->getUser());
+        $this->assertSame($complexParty, $contactWay->getParty());
+        $this->assertSame($complexConclusions, $contactWay->getConclusions());
     }
 
-    public function test_edgeCases_dateTimeTypes(): void
+    public function testEdgeCasesDateTimeTypes(): void
     {
+        $contactWay = new ContactWay();
         // 测试DateTime
         $dateTime = new \DateTimeImmutable('2024-01-15 12:30:45');
-        $this->contactWay->setCreateTime($dateTime);
-        $this->assertSame($dateTime, $this->contactWay->getCreateTime());
-        
+        $contactWay->setCreateTime($dateTime);
+        $this->assertSame($dateTime, $contactWay->getCreateTime());
+
         // 测试DateTimeImmutable
         $dateTimeImmutable = new \DateTimeImmutable('2024-02-20 09:15:30');
-        $this->contactWay->setUpdateTime($dateTimeImmutable);
-        $this->assertSame($dateTimeImmutable, $this->contactWay->getUpdateTime());
+        $contactWay->setUpdateTime($dateTimeImmutable);
+        $this->assertSame($dateTimeImmutable, $contactWay->getUpdateTime());
     }
 }

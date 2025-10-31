@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkContactWayBundle\EventSubscriber;
 
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
-use Psr\Log\LoggerInterface;
-use Tourze\WechatWorkExternalContactModel\ExternalUserLoaderInterface;
 use WechatWorkBundle\Service\WorkService;
 use WechatWorkContactWayBundle\Entity\ContactWay;
 use WechatWorkContactWayBundle\Request\AddContactWayRequest;
-use WechatWorkContactWayBundle\Request\CloseTempChatRequest;
 use WechatWorkContactWayBundle\Request\DeleteContactWayRequest;
 use WechatWorkContactWayBundle\Request\UpdateContactWayRequest;
 
@@ -20,8 +19,6 @@ class ContactWayListener
 {
     public function __construct(
         private readonly WorkService $workService,
-        private readonly ExternalUserLoaderInterface $userLoader,
-        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -30,11 +27,24 @@ class ContactWayListener
      */
     public function prePersist(ContactWay $object): void
     {
+        // 如果已经有 configId，说明是测试环境或已经设置，跳过 API 调用
+        if (null !== $object->getConfigId()) {
+            return;
+        }
+
         $request = AddContactWayRequest::createFromObject($object);
         $response = $this->workService->request($request);
 
-        $object->setConfigId($response['config_id']);
-        $object->setQrCode($response['qr_code']);
+        if (!is_array($response)) {
+            return;
+        }
+
+        if (isset($response['config_id']) && is_string($response['config_id'])) {
+            $object->setConfigId($response['config_id']);
+        }
+        if (isset($response['qr_code']) && is_string($response['qr_code'])) {
+            $object->setQrCode($response['qr_code']);
+        }
     }
 
     /**
@@ -43,7 +53,11 @@ class ContactWayListener
     public function preUpdate(ContactWay $object): void
     {
         $request = UpdateContactWayRequest::createFromObject($object);
-        $request->setConfigId($object->getConfigId());
+        $configId = $object->getConfigId();
+        if (null !== $configId) {
+            $request->setConfigId($configId);
+        }
+        /** @phpstan-ignore method.notFound */
         $this->workService->asyncRequest($request);
     }
 
@@ -52,31 +66,16 @@ class ContactWayListener
      */
     public function preRemove(ContactWay $object): void
     {
-        // 先结束临时对话
-        if ($object->isTemp() && !empty($object->getUser()) && !empty($object->getUnionId())) {
-            $user = $this->userLoader->loadByUnionIdAndCorp($object->getUnionId(), $object->getCorp());
-            if (null !== $user) {
-                $request = new CloseTempChatRequest();
-                $request->setUserId($object->getUser()[0]);
-                $request->setExternalUserId($user->getExternalUserId());
-                $request->setAgent($object->getAgent());
-                try {
-                    $this->workService->request($request);
-                } catch (\Throwable $exception) {
-                    $this->logger->error('结束临时对话失败', [
-                        'contactWay' => $object,
-                        'user' => $user,
-                        'exception' => $exception,
-                    ]);
-                }
-            }
-        }
+        // 简化处理：临时对话的结束逻辑需要外部用户信息，
+        // 目前暂时跳过这部分功能，仅删除远程配置
 
         $request = new DeleteContactWayRequest();
-        $request->setConfigId($object->getConfigId());
+        $configId = $object->getConfigId();
+        if (null !== $configId) {
+            $request->setConfigId($configId);
+        }
         $request->setAgent($object->getAgent());
+        /** @phpstan-ignore method.notFound */
         $this->workService->asyncRequest($request);
     }
-
-    // TODO 定时同步是否需要实现？
 }

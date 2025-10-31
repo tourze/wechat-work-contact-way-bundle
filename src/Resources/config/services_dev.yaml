@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        
+    # DataFixtures 服务配置
+    WechatWorkContactWayBundle\DataFixtures\ContactWayFixtures:
+        tags: ['doctrine.fixture.orm']

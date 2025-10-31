@@ -4,10 +4,10 @@ namespace WechatWorkContactWayBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\Arrayable\PlainArrayInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
-use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
-use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
+use Tourze\DoctrineIpBundle\Traits\IpTraceableAware;
 use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
@@ -16,6 +16,7 @@ use Tourze\WechatWorkContracts\CorpInterface;
 use WechatWorkContactWayBundle\Repository\ContactWayRepository;
 
 /**
+ * @implements PlainArrayInterface<string, mixed>
  * @see https://developer.work.weixin.qq.com/document/path/95724#%E8%8E%B7%E5%8F%96%E4%BC%81%E4%B8%9A%E5%B7%B2%E9%85%8D%E7%BD%AE%E7%9A%84%E3%80%8C%E8%81%94%E7%B3%BB%E6%88%91%E3%80%8D%E6%96%B9%E5%BC%8F
  * @see https://developer.work.weixin.qq.com/document/path/92228#%E8%8E%B7%E5%8F%96%E4%BC%81%E4%B8%9A%E5%B7%B2%E9%85%8D%E7%BD%AE%E7%9A%84%E3%80%8C%E8%81%94%E7%B3%BB%E6%88%91%E3%80%8D%E6%96%B9%E5%BC%8F
  */
@@ -26,83 +27,101 @@ class ContactWay implements PlainArrayInterface, \Stringable
     use SnowflakeKeyAware;
     use TimestampableAware;
     use BlameableAware;
+    use IpTraceableAware;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: CorpInterface::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?CorpInterface $corp = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: AgentInterface::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?AgentInterface $agent = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 128)]
     #[ORM\Column(length: 128, unique: true, nullable: false, options: ['comment' => 'ConfigID'])]
     private ?string $configId = null;
 
+    #[Assert\NotNull(message: 'Type cannot be null')]
+    #[Assert\Choice(choices: [1, 2], message: 'Type must be 1 or 2')]
     #[ORM\Column(options: ['comment' => '联系方式类型'])]
     private ?int $type = null;
 
+    #[Assert\NotNull(message: 'Scene cannot be null')]
+    #[Assert\Range(min: 1, max: 2, notInRangeMessage: 'Scene must be between 1 and 2')]
     #[ORM\Column(options: ['comment' => '场景'])]
     private ?int $scene = null;
 
+    #[Assert\Range(min: 1, max: 2, notInRangeMessage: 'Style must be between 1 and 2')]
     #[ORM\Column(nullable: true, options: ['comment' => '小程序控件样式'])]
     private ?int $style = null;
 
+    #[Assert\Length(max: 30)]
     #[ORM\Column(length: 30, nullable: true, options: ['comment' => '备注信息'])]
     private ?string $remark = null;
 
+    #[Assert\Type(type: 'bool', message: 'Skip verify must be boolean')]
     #[ORM\Column(nullable: true, options: ['comment' => '添加时无需验证'])]
     private ?bool $skipVerify = true;
 
+    #[Assert\Length(max: 30)]
     #[IndexColumn]
     #[ORM\Column(length: 30, nullable: true, options: ['comment' => '渠道参数'])]
     private ?string $state = null;
 
+    /**
+     * @var array<string>|null
+     */
+    #[Assert\Type(type: 'array', message: 'User must be array')]
     #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '使用userID'])]
     private ?array $user = null;
 
+    /**
+     * @var array<string>|null
+     */
+    #[Assert\Type(type: 'array', message: 'Party must be array')]
     #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '使用部门id'])]
     private ?array $party = null;
 
+    #[Assert\Type(type: 'bool', message: 'Temp must be boolean')]
     #[ORM\Column(nullable: true, options: ['comment' => '是否临时会话'])]
     private ?bool $temp = false;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column(nullable: true, options: ['comment' => '临时会话二维码有效期'])]
     private ?int $expiresIn = null;
 
+    #[Assert\PositiveOrZero]
     #[ORM\Column(nullable: true, options: ['comment' => '临时会话有效期'])]
     private ?int $chatExpiresIn = null;
 
+    #[Assert\Length(max: 128)]
     #[ORM\Column(length: 128, nullable: true, options: ['comment' => '临时会话unionid'])]
     private ?string $unionId = null;
 
+    #[Assert\Type(type: 'bool', message: 'Exclusive must be boolean')]
     #[ORM\Column(nullable: true, options: ['comment' => '是否开启同一外部企业客户只能添加同一个员工'])]
     private ?bool $exclusive = false;
 
+    /**
+     * @var array<mixed>|null
+     */
+    #[Assert\Type(type: 'array', message: 'Conclusions must be array')]
     #[ORM\Column(nullable: true, options: ['comment' => '结束语'])]
     private ?array $conclusions = null;
 
+    #[Assert\Length(max: 255)]
     #[ORM\Column(length: 255, nullable: true, options: ['comment' => '二维码链接'])]
     private ?string $qrCode = null;
-
-    #[CreateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '创建时IP'])]
-    private ?string $createdFromIp = null;
-
-    #[UpdateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '更新时IP'])]
-    private ?string $updatedFromIp = null;
-
 
     public function getCorp(): ?CorpInterface
     {
         return $this->corp;
     }
 
-    public function setCorp(?CorpInterface $corp): static
+    public function setCorp(?CorpInterface $corp): void
     {
         $this->corp = $corp;
-
-        return $this;
     }
 
     public function getAgent(): ?AgentInterface
@@ -110,11 +129,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->agent;
     }
 
-    public function setAgent(?AgentInterface $agent): static
+    public function setAgent(?AgentInterface $agent): void
     {
         $this->agent = $agent;
-
-        return $this;
     }
 
     public function getType(): ?int
@@ -122,11 +139,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->type;
     }
 
-    public function setType(int $type): static
+    public function setType(int $type): void
     {
         $this->type = $type;
-
-        return $this;
     }
 
     public function getScene(): ?int
@@ -134,11 +149,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->scene;
     }
 
-    public function setScene(int $scene): static
+    public function setScene(int $scene): void
     {
         $this->scene = $scene;
-
-        return $this;
     }
 
     public function getStyle(): ?int
@@ -146,11 +159,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->style;
     }
 
-    public function setStyle(?int $style): static
+    public function setStyle(?int $style): void
     {
         $this->style = $style;
-
-        return $this;
     }
 
     public function getRemark(): ?string
@@ -158,11 +169,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->remark;
     }
 
-    public function setRemark(?string $remark): static
+    public function setRemark(?string $remark): void
     {
         $this->remark = $remark;
-
-        return $this;
     }
 
     public function isSkipVerify(): ?bool
@@ -170,11 +179,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->skipVerify;
     }
 
-    public function setSkipVerify(?bool $skipVerify): static
+    public function setSkipVerify(?bool $skipVerify): void
     {
         $this->skipVerify = $skipVerify;
-
-        return $this;
     }
 
     public function getState(): ?string
@@ -182,35 +189,41 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->state;
     }
 
-    public function setState(?string $state): static
+    public function setState(?string $state): void
     {
         $this->state = $state;
-
-        return $this;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getUser(): ?array
     {
         return $this->user;
     }
 
-    public function setUser(?array $user): static
+    /**
+     * @param array<string>|null $user
+     */
+    public function setUser(?array $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getParty(): ?array
     {
         return $this->party;
     }
 
-    public function setParty(?array $party): static
+    /**
+     * @param array<string>|null $party
+     */
+    public function setParty(?array $party): void
     {
         $this->party = $party;
-
-        return $this;
     }
 
     public function isTemp(): ?bool
@@ -218,11 +231,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->temp;
     }
 
-    public function setTemp(?bool $temp): static
+    public function setTemp(?bool $temp): void
     {
         $this->temp = $temp;
-
-        return $this;
     }
 
     public function getExpiresIn(): ?int
@@ -230,11 +241,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->expiresIn;
     }
 
-    public function setExpiresIn(?int $expiresIn): static
+    public function setExpiresIn(?int $expiresIn): void
     {
         $this->expiresIn = $expiresIn;
-
-        return $this;
     }
 
     public function getChatExpiresIn(): ?int
@@ -242,11 +251,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->chatExpiresIn;
     }
 
-    public function setChatExpiresIn(?int $chatExpiresIn): static
+    public function setChatExpiresIn(?int $chatExpiresIn): void
     {
         $this->chatExpiresIn = $chatExpiresIn;
-
-        return $this;
     }
 
     public function getUnionId(): ?string
@@ -254,11 +261,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->unionId;
     }
 
-    public function setUnionId(?string $unionId): static
+    public function setUnionId(?string $unionId): void
     {
         $this->unionId = $unionId;
-
-        return $this;
     }
 
     public function isExclusive(): ?bool
@@ -266,23 +271,25 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->exclusive;
     }
 
-    public function setExclusive(?bool $exclusive): static
+    public function setExclusive(?bool $exclusive): void
     {
         $this->exclusive = $exclusive;
-
-        return $this;
     }
 
+    /**
+     * @return array<mixed>|null
+     */
     public function getConclusions(): ?array
     {
         return $this->conclusions;
     }
 
-    public function setConclusions(?array $conclusions): static
+    /**
+     * @param array<mixed>|null $conclusions
+     */
+    public function setConclusions(?array $conclusions): void
     {
         $this->conclusions = $conclusions;
-
-        return $this;
     }
 
     public function getConfigId(): ?string
@@ -290,11 +297,9 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->configId;
     }
 
-    public function setConfigId(?string $configId): static
+    public function setConfigId(?string $configId): void
     {
         $this->configId = $configId;
-
-        return $this;
     }
 
     public function getQrCode(): ?string
@@ -302,37 +307,14 @@ class ContactWay implements PlainArrayInterface, \Stringable
         return $this->qrCode;
     }
 
-    public function setQrCode(?string $qrCode): static
+    public function setQrCode(?string $qrCode): void
     {
         $this->qrCode = $qrCode;
-
-        return $this;
     }
 
-    public function setCreatedFromIp(?string $createdFromIp): self
-    {
-        $this->createdFromIp = $createdFromIp;
-
-        return $this;
-    }
-
-    public function getCreatedFromIp(): ?string
-    {
-        return $this->createdFromIp;
-    }
-
-    public function setUpdatedFromIp(?string $updatedFromIp): self
-    {
-        $this->updatedFromIp = $updatedFromIp;
-
-        return $this;
-    }
-
-    public function getUpdatedFromIp(): ?string
-    {
-        return $this->updatedFromIp;
-    }
-
+    /**
+     * @return array<string, mixed>
+     */
     public function retrievePlainArray(): array
     {
         return [

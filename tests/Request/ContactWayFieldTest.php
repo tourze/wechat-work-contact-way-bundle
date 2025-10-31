@@ -2,26 +2,25 @@
 
 namespace WechatWorkContactWayBundle\Tests\Request;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use WechatWorkBundle\Request\AgentAware;
 use WechatWorkContactWayBundle\Request\ContactWayField;
 
 /**
  * ContactWayField trait 测试
  * 创建一个测试用的具体类来测试trait功能
+ *
+ * @internal
  */
-class ContactWayFieldTest extends TestCase
+#[CoversClass(ContactWayField::class)]
+final class ContactWayFieldTest extends TestCase
 {
     private ContactWayFieldTestClass $instance;
 
-    protected function setUp(): void
-    {
-        $this->instance = new ContactWayFieldTestClass();
-    }
-
-    public function test_type_setterAndGetter(): void
+    public function testTypeSetterAndGetter(): void
     {
         // 测试联系方式类型设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->assertSame(1, $this->instance->getType());
 
@@ -29,9 +28,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertSame(2, $this->instance->getType());
     }
 
-    public function test_scene_setterAndGetter(): void
+    public function testSceneSetterAndGetter(): void
     {
         // 测试场景设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setScene(1);
         $this->assertSame(1, $this->instance->getScene());
 
@@ -39,9 +39,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertSame(2, $this->instance->getScene());
     }
 
-    public function test_style_setterAndGetter(): void
+    public function testStyleSetterAndGetter(): void
     {
         // 测试控件样式设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setStyle(1);
         $this->assertSame(1, $this->instance->getStyle());
 
@@ -49,9 +50,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getStyle());
     }
 
-    public function test_user_setterAndGetter(): void
+    public function testUserSetterAndGetter(): void
     {
         // 测试用户列表设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $users = ['user001', 'user002'];
         $this->instance->setUser($users);
         $this->assertSame($users, $this->instance->getUser());
@@ -60,9 +62,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getUser());
     }
 
-    public function test_skipVerify_setterAndGetter(): void
+    public function testSkipVerifySetterAndGetter(): void
     {
         // 测试是否需要验证设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setSkipVerify(true);
         $this->assertTrue($this->instance->isSkipVerify());
 
@@ -70,9 +73,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertFalse($this->instance->isSkipVerify());
     }
 
-    public function test_state_setterAndGetter(): void
+    public function testStateSetterAndGetter(): void
     {
         // 测试自定义参数设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $state = 'channel_001';
         $this->instance->setState($state);
         $this->assertSame($state, $this->instance->getState());
@@ -81,10 +85,11 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getState());
     }
 
-    public function test_party_setterAndGetter(): void
+    public function testPartySetterAndGetter(): void
     {
         // 测试部门列表设置和获取
-        $parties = [100, 200, 300];
+        $this->instance = new ContactWayFieldTestClass();
+        $parties = ['100', '200', '300'];
         $this->instance->setParty($parties);
         $this->assertSame($parties, $this->instance->getParty());
 
@@ -92,9 +97,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getParty());
     }
 
-    public function test_temp_setterAndGetter(): void
+    public function testTempSetterAndGetter(): void
     {
         // 测试临时会话模式设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setTemp(true);
         $this->assertTrue($this->instance->isTemp());
 
@@ -102,9 +108,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertFalse($this->instance->isTemp());
     }
 
-    public function test_expiresIn_setterAndGetter(): void
+    public function testExpiresInSetterAndGetter(): void
     {
         // 测试二维码有效期设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $expiresIn = 86400;
         $this->instance->setExpiresIn($expiresIn);
         $this->assertSame($expiresIn, $this->instance->getExpiresIn());
@@ -113,9 +120,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getExpiresIn());
     }
 
-    public function test_chatExpiresIn_setterAndGetter(): void
+    public function testChatExpiresInSetterAndGetter(): void
     {
         // 测试临时会话有效期设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $chatExpiresIn = 172800;
         $this->instance->setChatExpiresIn($chatExpiresIn);
         $this->assertSame($chatExpiresIn, $this->instance->getChatExpiresIn());
@@ -124,9 +132,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getChatExpiresIn());
     }
 
-    public function test_unionId_setterAndGetter(): void
+    public function testUnionIdSetterAndGetter(): void
     {
         // 测试联合ID设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $unionId = 'union_id_123';
         $this->instance->setUnionId($unionId);
         $this->assertSame($unionId, $this->instance->getUnionId());
@@ -135,9 +144,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getUnionId());
     }
 
-    public function test_exclusive_setterAndGetter(): void
+    public function testExclusiveSetterAndGetter(): void
     {
         // 测试独占模式设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setExclusive(true);
         $this->assertTrue($this->instance->isExclusive());
 
@@ -145,9 +155,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertFalse($this->instance->isExclusive());
     }
 
-    public function test_conclusions_setterAndGetter(): void
+    public function testConclusionsSetterAndGetter(): void
     {
         // 测试结束语设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $conclusions = [
             ['text' => ['content' => '感谢您的咨询！']],
         ];
@@ -158,9 +169,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getConclusions());
     }
 
-    public function test_remark_setterAndGetter(): void
+    public function testRemarkSetterAndGetter(): void
     {
         // 测试备注设置和获取
+        $this->instance = new ContactWayFieldTestClass();
         $remark = '销售渠道联系方式';
         $this->instance->setRemark($remark);
         $this->assertSame($remark, $this->instance->getRemark());
@@ -169,9 +181,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertNull($this->instance->getRemark());
     }
 
-    public function test_getFieldJson_basicConfiguration(): void
+    public function testGetFieldJsonBasicConfiguration(): void
     {
         // 测试基本配置的JSON输出
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setSkipVerify(true);
@@ -184,7 +197,7 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayHasKey('skip_verify', $json);
         $this->assertArrayHasKey('is_temp', $json);
         $this->assertArrayHasKey('is_exclusive', $json);
-        
+
         $this->assertSame(1, $json['type']);
         $this->assertSame(2, $json['scene']);
         $this->assertTrue($json['skip_verify']);
@@ -192,9 +205,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertFalse($json['is_exclusive']);
     }
 
-    public function test_getFieldJson_withOptionalFields(): void
+    public function testGetFieldJsonWithOptionalFields(): void
     {
         // 测试包含可选字段的JSON输出
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(2);
         $this->instance->setScene(1);
         $this->instance->setStyle(1);
@@ -215,9 +229,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertTrue($json['is_exclusive']);
     }
 
-    public function test_getFieldJson_singleUserType(): void
+    public function testGetFieldJsonSingleUserType(): void
     {
         // 测试单人类型（type=1）的JSON输出
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setUser(['user001']);
@@ -230,18 +245,19 @@ class ContactWayFieldTest extends TestCase
         $this->assertSame(1, $json['type']);
         $this->assertArrayHasKey('user', $json);
         $this->assertSame(['user001'], $json['user']);
-        
+
         // 单人类型不应包含party字段
         $this->assertArrayNotHasKey('party', $json);
     }
 
-    public function test_getFieldJson_multiUserType(): void
+    public function testGetFieldJsonMultiUserType(): void
     {
         // 测试多人类型（type=2）的JSON输出
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(2);
         $this->instance->setScene(1);
         $this->instance->setUser(['user001', 'user002']);
-        $this->instance->setParty([100, 200]);
+        $this->instance->setParty(['100', '200']);
         $this->instance->setSkipVerify(true);
         $this->instance->setTemp(false);
         $this->instance->setExclusive(false);
@@ -252,12 +268,13 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayHasKey('user', $json);
         $this->assertArrayHasKey('party', $json);
         $this->assertSame(['user001', 'user002'], $json['user']);
-        $this->assertSame([100, 200], $json['party']);
+        $this->assertSame(['100', '200'], $json['party']);
     }
 
-    public function test_getFieldJson_temporarySession(): void
+    public function testGetFieldJsonTemporarySession(): void
     {
         // 测试临时会话模式的JSON输出
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setTemp(true);
@@ -277,16 +294,17 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayHasKey('chat_expires_in', $json);
         $this->assertArrayHasKey('unionid', $json);
         $this->assertArrayHasKey('conclusions', $json);
-        
+
         $this->assertSame(86400, $json['expires_in']);
         $this->assertSame(3600, $json['chat_expires_in']);
         $this->assertSame('union_123', $json['unionid']);
         $this->assertSame([['text' => ['content' => '结束语测试']]], $json['conclusions']);
     }
 
-    public function test_getFieldJson_nonTemporarySession(): void
+    public function testGetFieldJsonNonTemporarySession(): void
     {
         // 测试非临时会话模式不包含临时会话字段
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setTemp(false);
@@ -306,9 +324,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayNotHasKey('conclusions', $json);
     }
 
-    public function test_getFieldJson_emptyUsers(): void
+    public function testGetFieldJsonEmptyUsers(): void
     {
         // 测试空用户数组不包含在JSON中
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setUser([]); // 空数组
@@ -321,9 +340,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayNotHasKey('user', $json);
     }
 
-    public function test_getFieldJson_emptyParty(): void
+    public function testGetFieldJsonEmptyParty(): void
     {
         // 测试空部门数组不包含在JSON中
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(2);
         $this->instance->setScene(1);
         $this->instance->setParty([]); // 空数组
@@ -336,9 +356,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayNotHasKey('party', $json);
     }
 
-    public function test_getFieldJson_nullOptionalFields(): void
+    public function testGetFieldJsonNullOptionalFields(): void
     {
         // 测试null的可选字段不包含在JSON中
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setStyle(null);
@@ -353,7 +374,7 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayNotHasKey('style', $json);
         $this->assertArrayNotHasKey('state', $json);
         $this->assertArrayNotHasKey('remark', $json);
-        
+
         // 必需字段应该存在
         $this->assertArrayHasKey('type', $json);
         $this->assertArrayHasKey('scene', $json);
@@ -362,17 +383,19 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayHasKey('is_exclusive', $json);
     }
 
-    public function test_createFromObject(): void
+    public function testCreateFromObject(): void
     {
+        $this->instance = new ContactWayFieldTestClass();
         // 由于createFromObject需要真实的ContactWay实体，这里主要验证静态方法存在
         // 验证方法是静态的
         $reflection = new \ReflectionMethod(ContactWayFieldTestClass::class, 'createFromObject');
         $this->assertTrue($reflection->isStatic());
     }
 
-    public function test_businessScenario_singleUserQRCode(): void
+    public function testBusinessScenarioSingleUserQRCode(): void
     {
         // 测试业务场景：单人二维码联系方式
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1); // 单人
         $this->instance->setScene(2); // 二维码
         $this->instance->setUser(['sales_001']);
@@ -394,13 +417,14 @@ class ContactWayFieldTest extends TestCase
         $this->assertFalse($json['is_exclusive']);
     }
 
-    public function test_businessScenario_multiUserMiniProgram(): void
+    public function testBusinessScenarioMultiUserMiniProgram(): void
     {
         // 测试业务场景：多人小程序联系方式
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(2); // 多人
         $this->instance->setScene(1); // 小程序
         $this->instance->setStyle(1);
-        $this->instance->setParty([100, 200]);
+        $this->instance->setParty(['100', '200']);
         $this->instance->setUser(['cs_001', 'cs_002']);
         $this->instance->setSkipVerify(false);
         $this->instance->setState('customer_service');
@@ -412,15 +436,16 @@ class ContactWayFieldTest extends TestCase
         $this->assertSame(2, $json['type']);
         $this->assertSame(1, $json['scene']);
         $this->assertSame(1, $json['style']);
-        $this->assertSame([100, 200], $json['party']);
+        $this->assertSame(['100', '200'], $json['party']);
         $this->assertSame(['cs_001', 'cs_002'], $json['user']);
         $this->assertFalse($json['skip_verify']);
         $this->assertSame('customer_service', $json['state']);
     }
 
-    public function test_businessScenario_temporaryContact(): void
+    public function testBusinessScenarioTemporaryContact(): void
     {
         // 测试业务场景：临时联系会话
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setUser(['temp_service']);
@@ -445,9 +470,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertSame('temp_channel', $json['state']);
     }
 
-    public function test_businessScenario_exclusiveContact(): void
+    public function testBusinessScenarioExclusiveContact(): void
     {
         // 测试业务场景：独占联系方式
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setUser(['exclusive_manager']);
@@ -465,76 +491,80 @@ class ContactWayFieldTest extends TestCase
         $this->assertFalse($json['skip_verify']);
     }
 
-    public function test_stateMaxLength(): void
+    public function testStateMaxLength(): void
     {
         // 测试state参数最大长度（30个字符）
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setSkipVerify(true);
         $this->instance->setTemp(false);
         $this->instance->setExclusive(false);
-        
+
         $longState = str_repeat('a', 30); // 30个字符
         $this->instance->setState($longState);
-        
+
         $this->assertSame($longState, $this->instance->getState());
         $this->assertSame(30, strlen($this->instance->getState()));
-        
+
         $json = $this->instance->getFieldJson();
         $this->assertSame($longState, $json['state']);
     }
 
-    public function test_remarkMaxLength(): void
+    public function testRemarkMaxLength(): void
     {
         // 测试remark参数最大长度（30个字符）
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setSkipVerify(true);
         $this->instance->setTemp(false);
         $this->instance->setExclusive(false);
-        
+
         $longRemark = str_repeat('备', 30); // 30个字符
         $this->instance->setRemark($longRemark);
-        
+
         $this->assertSame($longRemark, $this->instance->getRemark());
         $this->assertSame(30, mb_strlen($this->instance->getRemark()));
-        
+
         $json = $this->instance->getFieldJson();
         $this->assertSame($longRemark, $json['remark']);
     }
 
-    public function test_largeUserArray(): void
+    public function testLargeUserArray(): void
     {
         // 测试大用户数组
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setSkipVerify(true);
         $this->instance->setTemp(false);
         $this->instance->setExclusive(false);
-        
+
         $users = [];
-        for ($i = 0; $i < 100; $i++) {
-            $users[] = "user_$i";
+        for ($i = 0; $i < 100; ++$i) {
+            $users[] = "user_{$i}";
         }
-        
+
         $this->instance->setUser($users);
         $this->assertSame($users, $this->instance->getUser());
         $this->assertCount(100, $this->instance->getUser());
-        
+
         $json = $this->instance->getFieldJson();
         $this->assertSame($users, $json['user']);
         $this->assertCount(100, $json['user']);
     }
 
-    public function test_complexConclusions(): void
+    public function testComplexConclusions(): void
     {
         // 测试复杂结束语结构
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setTemp(true);
         $this->instance->setSkipVerify(true);
         $this->instance->setExclusive(false);
-        
+
         $complexConclusions = [
             [
                 'text' => [
@@ -555,17 +585,18 @@ class ContactWayFieldTest extends TestCase
                 ],
             ],
         ];
-        
+
         $this->instance->setConclusions($complexConclusions);
         $this->assertSame($complexConclusions, $this->instance->getConclusions());
-        
+
         $json = $this->instance->getFieldJson();
         $this->assertSame($complexConclusions, $json['conclusions']);
     }
 
-    public function test_multipleSetOperations(): void
+    public function testMultipleSetOperations(): void
     {
         // 测试多次设置值
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setType(2);
         $this->assertSame(2, $this->instance->getType());
@@ -579,9 +610,10 @@ class ContactWayFieldTest extends TestCase
         $this->assertSame('second', $this->instance->getState());
     }
 
-    public function test_immutableGetFieldJson(): void
+    public function testImmutableGetFieldJson(): void
     {
         // 测试getFieldJson返回的数组是不可变的
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setState('original');
@@ -605,89 +637,27 @@ class ContactWayFieldTest extends TestCase
         $this->assertArrayNotHasKey('new_field', $json2);
     }
 
-    public function test_specialCharactersInStrings(): void
+    public function testSpecialCharactersInStrings(): void
     {
         // 测试字符串字段中的特殊字符
+        $this->instance = new ContactWayFieldTestClass();
         $this->instance->setType(1);
         $this->instance->setScene(2);
         $this->instance->setSkipVerify(true);
         $this->instance->setTemp(false);
         $this->instance->setExclusive(false);
-        
+
         $specialState = 'channel-with_special.chars@123';
-        $specialRemark = '备注：包含特殊字符!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
-        
+        $specialRemark = '备注：包含特殊字符!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~';
+
         $this->instance->setState($specialState);
         $this->instance->setRemark($specialRemark);
-        
+
         $this->assertSame($specialState, $this->instance->getState());
         $this->assertSame($specialRemark, $this->instance->getRemark());
-        
+
         $json = $this->instance->getFieldJson();
         $this->assertSame($specialState, $json['state']);
         $this->assertSame($specialRemark, $json['remark']);
     }
 }
-
-/**
- * 测试用的具体类，使用ContactWayField trait
- */
-class ContactWayFieldTestClass
-{
-    use ContactWayField;
-    use AgentAware;
-    
-    /**
-     * 公开getFieldJson方法用于测试
-     */
-    public function getFieldJson(): array
-    {
-        $json = [
-            'type' => $this->getType(),
-            'scene' => $this->getScene(),
-            'skip_verify' => $this->isSkipVerify(),
-            'is_temp' => $this->isTemp(),
-            'is_exclusive' => $this->isExclusive(),
-        ];
-        if (isset($this->style) && null !== $this->getStyle()) {
-            $json['style'] = $this->getStyle();
-        }
-        if (isset($this->state) && null !== $this->getState()) {
-            $json['state'] = $this->getState();
-        }
-        if (isset($this->remark) && null !== $this->getRemark()) {
-            $json['remark'] = $this->getRemark();
-        }
-
-        if (1 === $this->getType()) {
-            if (isset($this->user) && !empty($this->getUser())) {
-                $json['user'] = $this->getUser();
-            }
-        }
-        if (2 === $this->getType()) {
-            if (isset($this->user) && !empty($this->getUser())) {
-                $json['user'] = $this->getUser();
-            }
-            if (isset($this->party) && !empty($this->getParty())) {
-                $json['party'] = $this->getParty();
-            }
-        }
-
-        if ($this->isTemp()) {
-            if (isset($this->expiresIn) && null !== $this->getExpiresIn()) {
-                $json['expires_in'] = $this->getExpiresIn();
-            }
-            if (isset($this->chatExpiresIn) && null !== $this->getChatExpiresIn()) {
-                $json['chat_expires_in'] = $this->getChatExpiresIn();
-            }
-            if (isset($this->unionId) && null !== $this->getUnionId()) {
-                $json['unionid'] = $this->getUnionId();
-            }
-            if (isset($this->conclusions) && null !== $this->getConclusions()) {
-                $json['conclusions'] = $this->getConclusions();
-            }
-        }
-
-        return $json;
-    }
-} 

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkContactWayBundle\Request;
 
 use HttpClientBundle\Request\ApiRequest;
 use WechatWorkBundle\Request\AgentAware;
+use WechatWorkContactWayBundle\Entity\ContactWay;
 
 /**
  * 更新企业已配置的「联系我」方式
@@ -20,11 +23,24 @@ class UpdateContactWayRequest extends ApiRequest
      */
     private string $configId;
 
-    public function getRequestPath(): string
+    private const API_PATH = 'cgi-bin/externalcontact/update_contact_way';
+
+    public static function createFromObject(ContactWay $object): self
     {
-        return '/cgi-bin/externalcontact/update_contact_way';
+        $request = new self();
+        $request->populateFromObject($object);
+
+        return $request;
     }
 
+    public function getRequestPath(): string
+    {
+        return '/' . self::API_PATH;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $json = $this->getFieldJson();

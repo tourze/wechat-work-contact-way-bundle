@@ -22,7 +22,7 @@ trait ContactWayField
     private ?int $style = null;
 
     /**
-     * @var array|null 使用该联系方式的用户userID列表，在type为1时为必填，且只能有一个
+     * @var array<string>|null 使用该联系方式的用户userID列表，在type为1时为必填，且只能有一个
      */
     private ?array $user = null;
 
@@ -37,7 +37,7 @@ trait ContactWayField
     private ?string $state = null;
 
     /**
-     * @var array|null 使用该联系方式的部门id列表，只在type为2时有效
+     * @var array<string>|null 使用该联系方式的部门id列表，只在type为2时有效
      */
     private ?array $party = null;
 
@@ -67,7 +67,7 @@ trait ContactWayField
     private bool $exclusive = false;
 
     /**
-     * @var array|null 结束语，会话结束时自动发送给客户，可参考"结束语定义"，仅在is_temp为true时有效
+     * @var array<mixed>|null 结束语，会话结束时自动发送给客户，可参考"结束语定义"，仅在is_temp为true时有效
      */
     private ?array $conclusions = null;
 
@@ -76,26 +76,23 @@ trait ContactWayField
      */
     private ?string $remark = null;
 
-    public static function createFromObject(ContactWay $object): static
+    protected function populateFromObject(ContactWay $object): void
     {
-        $request = new static();
-        $request->setType($object->getType());
-        $request->setScene($object->getScene());
-        $request->setSkipVerify($object->isSkipVerify());
-        $request->setTemp($object->isTemp());
-        $request->setExclusive($object->isExclusive());
-        $request->setStyle($object->getStyle());
-        $request->setState($object->getState());
-        $request->setUser($object->getUser());
-        $request->setParty($object->getParty());
-        $request->setExpiresIn($object->getExpiresIn());
-        $request->setChatExpiresIn($object->getChatExpiresIn());
-        $request->setUnionId($object->getUnionId());
-        $request->setConclusions($object->getConclusions());
-        $request->setAgent($object->getAgent());
-        $request->setRemark($object->getRemark());
-
-        return $request;
+        $this->setType($object->getType());
+        $this->setScene($object->getScene());
+        $this->setSkipVerify($object->isSkipVerify() ?? true);
+        $this->setTemp($object->isTemp() ?? false);
+        $this->setExclusive($object->isExclusive() ?? false);
+        $this->setStyle($object->getStyle());
+        $this->setState($object->getState());
+        $this->setUser($object->getUser());
+        $this->setParty($object->getParty());
+        $this->setExpiresIn($object->getExpiresIn());
+        $this->setChatExpiresIn($object->getChatExpiresIn());
+        $this->setUnionId($object->getUnionId());
+        $this->setConclusions($object->getConclusions());
+        $this->setAgent($object->getAgent());
+        $this->setRemark($object->getRemark());
     }
 
     public function getType(): int
@@ -105,7 +102,7 @@ trait ContactWayField
 
     public function setType(?int $type): void
     {
-        if ($type !== null) {
+        if (null !== $type) {
             $this->type = $type;
         }
     }
@@ -117,7 +114,7 @@ trait ContactWayField
 
     public function setScene(?int $scene): void
     {
-        if ($scene !== null) {
+        if (null !== $scene) {
             $this->scene = $scene;
         }
     }
@@ -132,11 +129,17 @@ trait ContactWayField
         $this->style = $style;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getUser(): ?array
     {
         return $this->user;
     }
 
+    /**
+     * @param array<string>|null $user
+     */
     public function setUser(?array $user): void
     {
         $this->user = $user;
@@ -162,11 +165,17 @@ trait ContactWayField
         $this->state = $state;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getParty(): ?array
     {
         return $this->party;
     }
 
+    /**
+     * @param array<string>|null $party
+     */
     public function setParty(?array $party): void
     {
         $this->party = $party;
@@ -222,11 +231,17 @@ trait ContactWayField
         $this->exclusive = $exclusive;
     }
 
+    /**
+     * @return array<mixed>|null
+     */
     public function getConclusions(): ?array
     {
         return $this->conclusions;
     }
 
+    /**
+     * @param array<mixed>|null $conclusions
+     */
     public function setConclusions(?array $conclusions): void
     {
         $this->conclusions = $conclusions;
@@ -242,22 +257,43 @@ trait ContactWayField
         $this->remark = $remark;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getFieldJson(): array
     {
         $json = [];
-        
-        // 只有在属性已设置时才添加到json中
+
+        $this->addBasicFields($json);
+        $this->addOptionalFields($json);
+        $this->addUserFields($json);
+        $this->addTempFields($json);
+
+        return $json;
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    private function addBasicFields(array &$json): void
+    {
         if (isset($this->type)) {
             $json['type'] = $this->getType();
         }
         if (isset($this->scene)) {
             $json['scene'] = $this->getScene();
         }
-        
+
         $json['skip_verify'] = $this->isSkipVerify();
         $json['is_temp'] = $this->isTemp();
         $json['is_exclusive'] = $this->isExclusive();
-        
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    private function addOptionalFields(array &$json): void
+    {
         if (null !== $this->style) {
             $json['style'] = $this->getStyle();
         }
@@ -267,36 +303,75 @@ trait ContactWayField
         if (null !== $this->getRemark()) {
             $json['remark'] = $this->getRemark();
         }
+    }
 
-        if (isset($this->type) && 1 === $this->getType()) {
-            if (!empty($this->user)) {
-                $json['user'] = $this->getUser();
-            }
-        }
-        if (isset($this->type) && 2 === $this->getType()) {
-            if (!empty($this->user)) {
-                $json['user'] = $this->getUser();
-            }
-            if (!empty($this->getParty())) {
-                $json['party'] = $this->getParty();
-            }
+    /**
+     * @param array<string, mixed> $json
+     */
+    private function addUserFields(array &$json): void
+    {
+        if (!isset($this->type)) {
+            return;
         }
 
-        if ($this->isTemp()) {
-            if (null !== $this->getExpiresIn()) {
-                $json['expires_in'] = $this->getExpiresIn();
-            }
-            if (null !== $this->getChatExpiresIn()) {
-                $json['chat_expires_in'] = $this->getChatExpiresIn();
-            }
-            if (null !== $this->getUnionId()) {
-                $json['unionid'] = $this->getUnionId();
-            }
-            if (null !== $this->getConclusions()) {
-                $json['conclusions'] = $this->getConclusions();
-            }
+        if (1 === $this->getType()) {
+            $this->addSingleUserField($json);
+        } elseif (2 === $this->getType()) {
+            $this->addMultipleUserFields($json);
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    private function addSingleUserField(array &$json): void
+    {
+        if ($this->isValidUserArray($this->user)) {
+            $json['user'] = $this->getUser();
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    private function addMultipleUserFields(array &$json): void
+    {
+        if ($this->isValidUserArray($this->user)) {
+            $json['user'] = $this->getUser();
+        }
+        if ($this->isValidUserArray($this->getParty())) {
+            $json['party'] = $this->getParty();
+        }
+    }
+
+    /**
+     * @param array<string>|null $userArray
+     */
+    private function isValidUserArray(?array $userArray): bool
+    {
+        return null !== $userArray && [] !== $userArray;
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    private function addTempFields(array &$json): void
+    {
+        if (!$this->isTemp()) {
+            return;
         }
 
-        return $json;
+        if (null !== $this->getExpiresIn()) {
+            $json['expires_in'] = $this->getExpiresIn();
+        }
+        if (null !== $this->getChatExpiresIn()) {
+            $json['chat_expires_in'] = $this->getChatExpiresIn();
+        }
+        if (null !== $this->getUnionId()) {
+            $json['unionid'] = $this->getUnionId();
+        }
+        if (null !== $this->getConclusions()) {
+            $json['conclusions'] = $this->getConclusions();
+        }
     }
 }

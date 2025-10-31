@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatWorkContactWayBundle\Request;
 
 use HttpClientBundle\Request\ApiRequest;
@@ -16,11 +18,16 @@ class DeleteContactWayRequest extends ApiRequest
 
     private string $configId;
 
+    private const API_PATH = 'cgi-bin/externalcontact/del_contact_way';
+
     public function getRequestPath(): string
     {
-        return '/cgi-bin/externalcontact/del_contact_way';
+        return '/' . self::API_PATH;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         return [

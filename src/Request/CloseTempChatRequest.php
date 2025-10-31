@@ -24,11 +24,16 @@ class CloseTempChatRequest extends ApiRequest
      */
     private string $externalUserId;
 
+    private const API_PATH = 'cgi-bin/externalcontact/close_temp_chat';
+
     public function getRequestPath(): string
     {
-        return '/cgi-bin/externalcontact/close_temp_chat';
+        return '/' . self::API_PATH;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         return [

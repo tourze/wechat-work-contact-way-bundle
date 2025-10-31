@@ -19,11 +19,16 @@ class GetContactWayRequest extends ApiRequest
      */
     private string $configId;
 
+    private const API_PATH = 'cgi-bin/externalcontact/get_contact_way';
+
     public function getRequestPath(): string
     {
-        return '/cgi-bin/externalcontact/get_contact_way';
+        return '/' . self::API_PATH;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         return [
