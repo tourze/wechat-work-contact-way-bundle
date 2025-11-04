@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WechatWorkContactWayBundle\Tests\Controller\Admin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -59,20 +60,17 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
 
     public function testAuthenticatedAccessShouldShowIndex(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
+        $url = $this->generateAdminUrl(Action::INDEX);
 
-        $client->request('GET', '/admin');
+        $client->request('GET', $url);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        self::assertResponseIsSuccessful();
     }
 
     public function testConfigIdFilterSearch(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
         // 创建真实的 Corp 和 Agent 实体
         $corp = $this->createTestCorp();
@@ -89,22 +87,24 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
         $entityManager->persist($contactWay);
         $entityManager->flush();
 
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'configId' => [
+                    'comparison' => 'like',
                     'value' => 'test-config-id',
                 ],
             ],
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+
+        self::assertResponseIsSuccessful();
     }
 
     public function testStateFilterSearch(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
         // 创建真实的 Corp 和 Agent 实体
         $corp = $this->createTestCorp();
@@ -122,22 +122,24 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
         $entityManager->persist($contactWay);
         $entityManager->flush();
 
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'state' => [
+                    'comparison' => 'like',
                     'value' => 'channel-test',
                 ],
             ],
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+
+        self::assertResponseIsSuccessful();
     }
 
     public function testTypeChoiceFilter(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
         // 创建真实的 Corp 和 Agent 实体
         $corp = $this->createTestCorp();
@@ -154,22 +156,24 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
         $entityManager->persist($contactWay);
         $entityManager->flush();
 
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'type' => [
+                    'comparison' => '=',
                     'value' => 1,
                 ],
             ],
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+
+        self::assertResponseIsSuccessful();
     }
 
     public function testSceneChoiceFilter(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
         // 创建真实的 Corp 和 Agent 实体
         $corp = $this->createTestCorp();
@@ -186,22 +190,24 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
         $entityManager->persist($contactWay);
         $entityManager->flush();
 
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'scene' => [
+                    'comparison' => '=',
                     'value' => 2,
                 ],
             ],
         ]);
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+
+        self::assertResponseIsSuccessful();
     }
 
     public function testBooleanFilters(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
         // 创建真实的 Corp 和 Agent 实体
         $corp = $this->createTestCorp();
@@ -222,60 +228,71 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
         $entityManager->flush();
 
         // 测试 skipVerify 过滤器
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'skipVerify' => [
+                    'comparison' => '=',
                     'value' => 1,
                 ],
             ],
         ]);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+        self::assertResponseIsSuccessful();
 
         // 测试 temp 过滤器
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'temp' => [
+                    'comparison' => '=',
                     'value' => 1,
                 ],
             ],
         ]);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+        self::assertResponseIsSuccessful();
 
         // 测试 exclusive 过滤器
-        $client->request('GET', '/admin', [
+        $url = $this->generateAdminUrl(Action::INDEX, [
+            'crudControllerFqcn' => ContactWayCrudController::class,
             'filters' => [
                 'exclusive' => [
+                    'comparison' => '=',
                     'value' => 1,
                 ],
             ],
         ]);
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', $url);
+        self::assertResponseIsSuccessful();
     }
 
     public function testValidationForRequiredFields(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
-        // 测试必填字段的验证
-        $client->request('POST', '/admin', [
-            'form' => [
-                'configId' => '', // 必填字段留空
-                'type' => '',      // 必填字段留空
-                'scene' => '',     // 必填字段留空
-            ],
-        ]);
+        // 访问 NEW 表单
+        $crawler = $client->request('GET', $this->generateAdminUrl(Action::NEW, ['crudControllerFqcn' => ContactWayCrudController::class]));
+        $this->assertResponseIsSuccessful();
 
-        // 验证表单错误状态码或成功显示表单
-        $statusCode = $client->getResponse()->getStatusCode();
-        if (422 === $statusCode) {
-            $this->assertEquals(422, $statusCode);
-        } else {
-            $this->assertEquals(200, $statusCode);
-            // 验证表单成功显示
-            $content = $client->getResponse()->getContent() ?? '';
-            $this->assertNotEmpty($content);
+        // 测试必填字段的验证 - 找到表单并用空值提交
+        $buttonCrawler = $crawler->selectButton('Create');
+        if ($buttonCrawler->count() > 0) {
+            $form = $buttonCrawler->form();
+
+            // 提交表单，必填字段留空（configId, type, scene）
+            $crawler = $client->submit($form);
+
+            // 验证表单错误状态码或成功显示表单
+            $statusCode = $client->getResponse()->getStatusCode();
+            if (422 === $statusCode) {
+                $this->assertEquals(422, $statusCode);
+            } else {
+                $this->assertEquals(200, $statusCode);
+                // 验证表单成功显示
+                $content = $client->getResponse()->getContent() ?? '';
+                $this->assertNotEmpty($content);
+            }
         }
     }
 
