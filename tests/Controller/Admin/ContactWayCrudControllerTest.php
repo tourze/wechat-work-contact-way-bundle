@@ -418,9 +418,7 @@ final class ContactWayCrudControllerTest extends AbstractEasyAdminControllerTest
 
     public function testNumericFilters(): void
     {
-        $client = self::createClientWithDatabase();
-        $admin = $this->createAdminUser('admin@example.com', 'admin123');
-        $this->loginAsAdmin($client, 'admin@example.com', 'admin123');
+        $client = $this->createAuthenticatedClient();
 
         // 创建真实的 Corp 和 Agent 实体
         $corp = $this->createTestCorp();

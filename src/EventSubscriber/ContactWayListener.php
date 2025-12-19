@@ -57,7 +57,6 @@ class ContactWayListener
         if (null !== $configId) {
             $request->setConfigId($configId);
         }
-        /** @phpstan-ignore method.notFound */
         $this->workService->asyncRequest($request);
     }
 
@@ -75,7 +74,6 @@ class ContactWayListener
             $request->setConfigId($configId);
         }
         $request->setAgent($object->getAgent());
-        /** @phpstan-ignore method.notFound */
         $this->workService->asyncRequest($request);
     }
 }

@@ -51,7 +51,7 @@ final class SyncContactWaysCommandTest extends AbstractCommandTestCase
 
         // 从容器获取命令（会自动注入所有依赖）
         $command = self::getService(SyncContactWaysCommand::class);
-        $application->add($command);
+        $application->addCommand($command);
 
         $this->commandTester = new CommandTester($command);
     }
